@@ -6,6 +6,10 @@
 #include <proc.h>
 #include <paging.h>
 
+#define SETZERO 0
+#define SETONE  1
+#define TWOTEN  1024
+
 extern struct pentry proctab[];
 /*------------------------------------------------------------------------
  * vgetmem  --  allocate virtual heap storage, returning lowest WORD address
@@ -18,5 +22,3 @@ WORD	*vgetmem(nbytes)
 	kprintf("To be implemented!\n");
 	return( SYSERR );
 }
-
-
