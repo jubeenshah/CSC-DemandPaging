@@ -8,6 +8,7 @@
 #define SETZERO 0
 #define SETONE  1
 #define TWOTEN  1024
+#define ANDVAL  0xfffff000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
  *-------------------------------------------------------------------------
@@ -94,7 +95,29 @@ SYSCALL free_bsm(int i){
  *-------------------------------------------------------------------------
  */
 SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
-  
+
+  STATWORD ps;
+	disable(ps);
+
+  int index = SETZERO;
+  int starth = vaddr & ANDVAL;
+  int startp = starth >> 12;
+
+  while (index < 8) {
+    /* code */
+    if (bsm_tab[index].bs_pid[pid] == SETONE) {
+      /* code */
+      *store = index;
+      int vpn = bsm_tab[index].bs_vpno[pid];
+      *pageth = startp - vpn;
+      restore(ps);
+      return OK;
+
+    }
+    index = index + 1;
+  }
+  restore(ps);
+  return SYSERR;
 }
 
 
@@ -102,8 +125,23 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
  * bsm_map - add an mapping into bsm_tab
  *-------------------------------------------------------------------------
  */
-SYSCALL bsm_map(int pid, int vpno, int source, int npages)
-{
+SYSCALL bsm_map(int pid, int vpno, int source, int npages){
+  STATWORD ps;
+	disable(ps);
+
+  if (bsm_tab[source].bs_status==SETZERO) {
+      bsm_tab[source].bs_status = SETONE;
+      bsm_tab[source].bs_npages = npages;
+  }
+  bsm_tab[source].bs_pid[pid] = SETONE;
+  bsm_tab[source].bs_sem      = SETZERO;
+  bsm_tab[source].bs_vpno[pid]= vpno;
+  bsm_tab[source].bs_mapping++;
+
+  proctab[currpid].vhpno = vpno;
+  proctab[currpid].store = source;
+  restore(ps);
+  return OK;
 }
 
 
