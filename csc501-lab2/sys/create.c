@@ -1,5 +1,5 @@
 /* create.c - create, newpid */
-    
+
 #include <conf.h>
 #include <i386.h>
 #include <kernel.h>
@@ -11,6 +11,10 @@
 
 LOCAL int newpid();
 
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
+void createPageDir(int i);
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
  *------------------------------------------------------------------------
@@ -25,7 +29,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 					/* array in the code)		*/
 {
 	unsigned long	savsp, *pushsp;
-	STATWORD 	ps;    
+	STATWORD 	ps;
 	int		pid;		/* stores new process id	*/
 	struct	pentry	*pptr;		/* pointer to proc. table entry */
 	int		i;
@@ -62,7 +66,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	pptr->pstklen = ssize;
 	pptr->psem = 0;
 	pptr->phasmsg = FALSE;
-	pptr->plimit = pptr->pbase - ssize + sizeof (long);	
+	pptr->plimit = pptr->pbase - ssize + sizeof (long);
 	pptr->pirmask[0] = 0;
 	pptr->pnxtkin = BADPID;
 	pptr->pdevs[0] = pptr->pdevs[1] = pptr->ppagedev = BADDEV;
@@ -117,4 +121,35 @@ LOCAL int newpid()
 			return(pid);
 	}
 	return(SYSERR);
+}
+
+void createPageDir(int i) {
+  int index = i;
+
+  int frameAvail = SETZERO;
+  pd_t * pd_entry;
+  get_frm(&frameAvail);
+
+  int a = TWOTEN + frameAvail;
+  a = a * TWOTEN * 4;
+  proctab[index].pdbr = a;
+  frm_tab[frameAvail].fr_status = SETONE;
+  frm_tab[frameAvail].fr_type   = SETONE * 2;
+  frm_tab[frameAvail].fr_pid    = index
+  pd_entry = a;
+  int indexDos = SETZERO;
+  int sizeIs = sizeof(pt_t);
+  int limit = (TWOTEN * 4) / sizeIs
+  while (indexDos < limit) {
+    /* code */
+    pd_entry[indexDos].pd_write = SETONE;
+    int limitDos = SETONE * 4;
+    if (indexDos < limitDos) {
+      /* code */
+      int addIs = TWOTEN + indexDos
+      pd_entry[indexDos].pd_base = addIs;
+      pd_entry[indexDos].pd_pres = SETONE;
+    }
+    indexDos = indexDos + SETONE;
+  }
 }
