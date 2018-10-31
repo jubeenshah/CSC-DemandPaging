@@ -24,6 +24,17 @@ SYSCALL init_bsm(){
     /* code */
     bsm_tab[index].bs_status = SETZERO;
     indexDos = SETZERO;
+    /*
+    typedef struct{
+      int bs_status;			/* MAPPED or UNMAPPED		*
+      int bs_pid[NPROC];				/* process id using this slot   *
+      int bs_vpno[NPROC];				/* starting virtual page number *
+      int bs_npages;			/* number of pages in the store *
+      int bs_sem;				/* semaphore mechanism ?	*
+      int bs_private;
+      int bs_mapping;
+    } bs_map_t;
+    */
     while (indexDos < NPROC) {
       /* code */
       bsm_tab[index].bs_pid[indexDos] = SETZERO;
@@ -43,8 +54,23 @@ SYSCALL init_bsm(){
  * get_bsm - get a free entry from bsm_tab
  *-------------------------------------------------------------------------
  */
-SYSCALL get_bsm(int* avail)
-{
+SYSCALL get_bsm(int* avail) {
+  STATWORD ps;
+  disable(ps);
+
+  int index = SETZERO;
+  while (index < 8) { //8 = Number of backing Store
+    /* code */
+    if (bsm_tab[index].bs_status == SETZERO) {
+      /* code */
+      *avail = index;
+      restore(ps);
+      return OK;
+    }
+    index = index + 1;
+  }
+  restore(ps);
+  return SYSERR;
 }
 
 
@@ -52,16 +78,23 @@ SYSCALL get_bsm(int* avail)
  * free_bsm - free an entry from bsm_tab
  *-------------------------------------------------------------------------
  */
-SYSCALL free_bsm(int i)
-{
+SYSCALL free_bsm(int i){
+
+  STATWORD ps;
+	disable(ps);
+
+	bsm_tab[i].bs_status=SETZERO;
+
+	restore(ps);
+	return OK;
 }
 
 /*-------------------------------------------------------------------------
  * bsm_lookup - lookup bsm_tab and find the corresponding entry
  *-------------------------------------------------------------------------
  */
-SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth)
-{
+SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
+  
 }
 
 
