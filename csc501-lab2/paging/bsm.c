@@ -137,9 +137,9 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   bsm_tab[source].bs_sem      = SETZERO;
   bsm_tab[source].bs_vpno[pid]= vpno;
   bsm_tab[source].bs_mapping++;
-
   proctab[currpid].vhpno = vpno;
   proctab[currpid].store = source;
+
   restore(ps);
   return OK;
 }
@@ -150,6 +150,34 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
  * bsm_unmap - delete an mapping from bsm_tab
  *-------------------------------------------------------------------------
  */
-SYSCALL bsm_unmap(int pid, int vpno, int flag)
-{
+SYSCALL bsm_unmap(int pid, int vpno, int flag){
+  STATWORD ps;
+	disable(ps);
+
+  int index = SETZERO;
+  int proctabStore = proctab[currpid].store;
+  int twoFourTen = TWOTEN * 4;
+  int pageth;
+  unsigned long virtualAddress = vpno * twoFourTen;
+  bsm_tab[proctabStore].bs_mapping--;
+
+  while (index < TWOTEN) {
+    /* code */
+    int checkPid = frm_tab[index].fr_pid;
+    int checkTyp = frm_tab[index].fr_type;
+
+    if (checkPid == pid) {
+      if (checkTyp == SETZERO) {
+        if (bsm_lookup(pid, virtualAddress, &proctabStore, &pageth) == SYSERR) {
+          continue;
+        }
+        int twotenI = TWOTEN + index;
+        int mult = twotenI * twoFourTen;
+        write_bs(mult, proctabStore, pageth);
+      }
+    }
+  }
+
+  restore(ps);
+  return OK;
 }
