@@ -14,8 +14,7 @@ extern int page_replace_policy;
  * init_frm - initialize frm_tab
  *-------------------------------------------------------------------------
  */
-SYSCALL init_frm()
-{
+SYSCALL init_frm(){
   //kprintf("To be implemented!\n");
 
   STATWORD ps;
@@ -52,10 +51,41 @@ SYSCALL init_frm()
  * get_frm - get a free frame according page replacement policy
  *-------------------------------------------------------------------------
  */
-SYSCALL get_frm(int* avail)
-{
-  kprintf("To be implemented!\n");
-  return OK;
+SYSCALL get_frm(int* avail){
+
+  STATWORD ps;
+  disable(ps);
+
+  int index = SETZERO;
+  *avail    = -SETONE;
+
+  int frameNumber;
+
+  while (index < TWOTEN) {
+    /* code */
+    int checkStatus = frm_tab[index].fr_status;
+
+    if (checkStatus == SETZERO) {
+      *avail = index;
+      scA[index] = SETONE;
+      restore(ps);
+      return OK;
+    }
+    index = index + 1;
+  }
+  if (page_replace_policy == 3) { // 3 = Second Chance
+    /* code */
+    frameNumber = getFrameSC();
+    free_frm(frameNumber);
+    scA[frameNumber] = SETONE;
+    *avail = frameNumber;
+
+    restore(ps);
+    return OK;
+  }
+  //kprintf("To be implemented!\n");
+  restore(ps);
+  return SYSERR;
 }
 
 /*-------------------------------------------------------------------------
@@ -65,6 +95,7 @@ SYSCALL get_frm(int* avail)
 SYSCALL free_frm(int i)
 {
 
-  kprintf("To be implemented!\n");
+  //kprintf("To be implemented!\n");
+  
   return OK;
 }
