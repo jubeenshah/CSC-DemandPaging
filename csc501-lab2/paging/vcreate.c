@@ -1,5 +1,5 @@
 /* vcreate.c - vcreate */
-    
+
 #include <conf.h>
 #include <i386.h>
 #include <kernel.h>
@@ -12,6 +12,10 @@
 /*
 static unsigned long esp;
 */
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
+
 
 LOCAL	newpid();
 /*------------------------------------------------------------------------
@@ -28,7 +32,41 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
 	long	args;			/* arguments (treated like an	*/
 					/* array in the code)		*/
 {
-	kprintf("To be implemented!\n");
+	//kprintf("To be implemented!\n");
+
+  STATWORD ps;
+  disable(ps);
+  int a = BACKING_STORE_BASE;
+  int b = BACKING_STORE_UNIT_SIZE;
+  int pid;
+  int store;
+
+  int checkStore;
+  pid = create(procaddr, ssize, priority, name, nargs, args);
+  checkStore = get_bsm(&store);
+
+  if (checkStore == SYSERR) {
+    restore (ps);
+    return SYSERR;
+  }
+  int twoFourTen = TWOTEN * 4;
+  bsm_map(pid, twoFourTen, store, hsize);
+  bsm_tab[store].bs_private = SETONE;
+
+  proctab[pid].vhpnpages = hsize;
+  int list = getmem(sizeof(struct mblock *));
+  proctab[pid].vmemlist = list;
+  int next = (struct mblock *)(twoFourTen * NBPG);
+  proctab[pid].vmemlist->mnext = next;
+  proctab[pid].vmemlist->mlen = SETZERO;
+
+  struct mblock *baseblock;
+  int c = store * b;
+  baseblock = a + c;
+  baseblock->mlen = twoFourTen * hsize;
+  baseblock->mnext = NULL;
+
+  restore(ps);
 	return OK;
 }
 
