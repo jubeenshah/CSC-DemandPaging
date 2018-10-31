@@ -4,9 +4,12 @@
 #include <kernel.h>
 #include <proc.h>
 #include <q.h>
+#include <paging.h>
 
 unsigned long currSP;	/* REAL sp of current process */
-
+#define SETONE 	1
+#define SETZERO	0
+#define TWOTEN 	1024
 /*------------------------------------------------------------------------
  * resched  --  reschedule processor to highest priority ready process
  *
@@ -30,7 +33,7 @@ int	resched()
 		restore(PS);
 		return(OK);
 	}
-	
+
 #ifdef STKCHK
 	/* make sure current stack has room for ctsw */
 	asm("movl	%esp, currSP");
@@ -41,7 +44,7 @@ int	resched()
 			(unsigned long) currSP);
 		panic("current process stack overflow");
 	}
-#endif	
+#endif
 
 	/* force context switch */
 
@@ -82,13 +85,39 @@ int	resched()
 #ifdef	DEBUG
 	PrintSaved(nptr);
 #endif
-	
+	int a = optr;
+	int b = proctab;
+	int oldProcessID = a - b;
+	int store;
+	int pageth;
+	int hasToLookup;
+	int index = SETZERO;
+	while (index < TWOTEN) {
+		/* code */
+		int checkPid = frm_tab[index].fr_pid;
+		int checkTyp = frm_tab[index].fr_type;
+		if (checkPid == oldProcessID && checkTyp == SETZERO) {
+			/* code */
+			int q = oldProcessID;
+			int w = frm_tab[index].fr_vpno * TWOTEN * 4;
+
+			hasToLookup = bsm_lookup(q,w,&store, &pageth);
+			if (hasToLookup == -SETONE) {
+				continue;
+			}
+			int e = index + TWOTEN;
+			e = e * TWOTEN * 4;
+			write_bs(e, store, pageth);
+		}
+		index = index + SETONE;
+	}
+
 	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
 
 #ifdef	DEBUG
 	PrintSaved(nptr);
 #endif
-	
+
 	/* The OLD process returns here when resumed. */
 	restore(PS);
 	return OK;
@@ -104,7 +133,7 @@ PrintSaved(ptr)
     unsigned int i;
 
     if (ptr->pname[0] != 'm') return;
-    
+
     kprintf("\nSaved context listing for process '%s'\n",ptr->pname);
     for (i=0; i<8; ++i) {
 	kprintf("     D%d: 0x%08lx	",i,(unsigned long) ptr->pregs[i]);
@@ -115,5 +144,3 @@ PrintSaved(ptr)
     kprintf("  PS: 0x%lx\n",(unsigned long) ptr->pregs[PS]);
 }
 #endif
-
-
