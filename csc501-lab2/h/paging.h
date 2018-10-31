@@ -42,6 +42,9 @@ typedef struct{
   unsigned int pd_offset : 10;		/* page directory offset	*/
 } virt_addr_t;
 
+//changes in bs_pid--> bs_pid[NPROC]
+//changes in bs_vpno --> bs_vpno[NPROC]
+//private & mapping
 typedef struct{
   int bs_status;			/* MAPPED or UNMAPPED		*/
   int bs_pid;				/* process id using this slot   */
@@ -91,3 +94,10 @@ SYSCALL write_bs(char *, bsd_t, int);
 
 #define BACKING_STORE_BASE	0x00800000
 #define BACKING_STORE_UNIT_SIZE 0x00100000
+
+/*Edits
+extern int scA[]
+scPointer
+#define NBACKINGSTORE 8
+pages per backing store ?
+*/
