@@ -13,9 +13,13 @@
 #include <paging.h>
 
 /*#define DETAIL */
-#define HOLESIZE	(600)	
+#define HOLESIZE	(600)
 #define	HOLESTART	(640 * 1024)
-#define	HOLEEND		((1024 + HOLESIZE) * 1024)  
+#define	HOLEEND		((1024 + HOLESIZE) * 1024)
+
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
 /* Extra 600 for bootp loading, and monitor */
 
 extern	int	main();	/* address of user's main prog	*/
@@ -36,6 +40,16 @@ struct	mblock	memlist;	/* list of free memory blocks		*/
 #ifdef	Ntty
 struct  tty     tty[Ntty];	/* SLU buffers and mode control		*/
 #endif
+
+bs_map_t bsm_tab[8];
+fr_map_t frm_tab[TWOTEN];
+
+int counter;
+int scA[TWOTEN];
+int scPointer;
+
+counter = SETZERO;
+
 
 /* active system status */
 int	numproc;		/* number of live user processes	*/
@@ -90,25 +104,25 @@ nulluser()				/* babysit CPU when no one is home */
 
 	kprintf("%d bytes real mem\n",
 		(unsigned long) maxaddr+1);
-#ifdef DETAIL	
+#ifdef DETAIL
 	kprintf("    %d", (unsigned long) 0);
 	kprintf(" to %d\n", (unsigned long) (maxaddr) );
-#endif	
+#endif
 
 	kprintf("%d bytes Xinu code\n",
 		(unsigned long) ((unsigned long) &end - (unsigned long) start));
-#ifdef DETAIL	
+#ifdef DETAIL
 	kprintf("    %d", (unsigned long) start);
 	kprintf(" to %d\n", (unsigned long) &end );
 #endif
 
-#ifdef DETAIL	
+#ifdef DETAIL
 	kprintf("%d bytes user stack/heap space\n",
 		(unsigned long) ((unsigned long) maxaddr - (unsigned long) &end));
 	kprintf("    %d", (unsigned long) &end);
 	kprintf(" to %d\n", (unsigned long) maxaddr);
-#endif	
-	
+#endif
+
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
 
 
@@ -134,7 +148,7 @@ sysinit()
 	struct	mblock	*mptr;
 	SYSCALL pfintr();
 
-	
+
 
 	numproc = 0;			/* initialize system variables */
 	nextproc = NPROC-1;
@@ -164,7 +178,7 @@ sysinit()
 		mptr->mlen = (int) truncew((unsigned)maxaddr - (int)&end -
 			NULLSTK);
 	}
-	
+
 
 	for (i=0 ; i<NPROC ; i++)	/* initialize process table */
 		proctab[i].pstate = PRFREE;
@@ -181,7 +195,7 @@ sysinit()
 	mon_init();     /* init monitor */
 
 #ifdef NDEVS
-	for (i=0 ; i<NDEVS ; i++ ) {	    
+	for (i=0 ; i<NDEVS ; i++ ) {
 	    init_dev(i);
 	}
 #endif
@@ -210,7 +224,7 @@ sysinit()
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
-
+  initializeDemandPaging();
 	return(OK);
 }
 
@@ -244,7 +258,7 @@ long sizmem()
 	/* at least now its hacked to return
 	   the right value for the Xinu lab backends (16 MB) */
 
-	return 4096; 
+	return 4096;
 
 	start = ptr = 0;
 	npages = 0;
@@ -263,4 +277,56 @@ long sizmem()
 		}
 	}
 	return npages;
+}
+
+void initializeDemandPaging() {
+  SYSCALL pfintr();
+  int index       = SETZERO;
+  int indexDos    = SETZERO;
+  int frameNumber = SETZERO;
+
+  init_bsm();
+  init_frm();
+
+  pt_t *pt;
+  pd_t *pd;
+  int limitA = SETONE * 4;
+  while (index < limitA) {
+    /* code */
+    get_frm(&frameNumber);
+    frm_tab[frameNumber].fr_status = SETONE;
+    frm_tab[frameIndex].fr_type    = SETONE;
+    frm_tab[frameIndex].fr_pid     = SETZERO;
+
+    int a = TWOTEN + frameNumber;
+    a = a * TWOTEN * 4;
+    pt = a;
+
+    while (indexDos < TWOTEN) {
+      /* code */
+
+      pt->pt_pres   = SETONE;
+      pt->pt_write  = SETONE;
+      pt->pt_user   = SETZERO;
+      pt->pt_pwt    = SETZERO;
+      pt->pt_pcd    = SETZERO;
+      pt->pt_acc    = SETZERO;
+      pt->pt_mbz    = SETZERO;
+      pt->pt_dirty  = SETZERO;
+      pt->pt_global = SETONE;
+      pt->pt_avail  = SETZERO;
+      int baseVal = index * TWOTEN;
+      baseVal = baseVal * indexDos;
+      pt->pt_base = baseVal;
+      pt = pt + 1;
+      indexDos = indexDos + SETONE
+    }
+    index = index + SETONE;
+  }
+  createPageDir(SETZERO);
+  pdbr_init(SETZERO);
+  //int set_evec(unsigned int xnum, u_long handler)
+  int chouda = SETONE * 14;
+  set_evec(chouda, pfintr);
+  enable_paging();
 }
