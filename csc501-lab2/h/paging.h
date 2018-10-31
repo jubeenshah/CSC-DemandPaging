@@ -47,10 +47,12 @@ typedef struct{
 //private & mapping
 typedef struct{
   int bs_status;			/* MAPPED or UNMAPPED		*/
-  int bs_pid;				/* process id using this slot   */
-  int bs_vpno;				/* starting virtual page number */
+  int bs_pid[NPROC];				/* process id using this slot   */
+  int bs_vpno[NPROC];				/* starting virtual page number */
   int bs_npages;			/* number of pages in the store */
   int bs_sem;				/* semaphore mechanism ?	*/
+  int bs_private;
+  int bs_mapping;
 } bs_map_t;
 
 typedef struct{
