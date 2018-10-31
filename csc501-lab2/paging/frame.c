@@ -96,6 +96,33 @@ SYSCALL free_frm(int i)
 {
 
   //kprintf("To be implemented!\n");
-  
+
   return OK;
+}
+
+int getFrameSC() {
+  STATWORD ps;
+  disable(ps);
+  int index = SETZERO;
+  index = index + scPointer;
+
+  while(SETONE) {
+    index = index % TWOTEN;
+    int checkType = frm_tab[index].fr_type;
+    if (checkType == SETZERO) {
+      int checkSCValue = scA[index];
+      if (checkSCValue == SETONE) {
+        int updateSCVAL = SETZERO;
+        scA[index] = updateSCVAL;
+      } else {
+        scPointer = index + SETONE;
+        restore (ps);
+        return index;
+      }
+    }
+    index = index + SETONE;
+  }
+
+  restore(ps);
+  return SYSERR;
 }
