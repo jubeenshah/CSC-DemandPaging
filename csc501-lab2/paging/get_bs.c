@@ -15,7 +15,7 @@ int get_bs(bsd_t bs_id, unsigned int npages) {
     int checkPrivateValue = bsm_tab[bs_id].bs_private;
     int checkStatus = bsm_tab[bs_id].bs_status;
     int pagesValue = bsm_tab[bs_id].bs_npages;
-    if (bs_id >= NEIGHT || bs_id < SETZERO ||
+    if (bs_id >= NEIGHT || bs_id < SETZERO || npages > NPAGES ||
           npages <= SETZERO || checkSemValue == SETONE) {
       /* code */
       restore(ps);
