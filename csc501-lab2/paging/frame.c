@@ -96,7 +96,79 @@ SYSCALL free_frm(int i)
 {
 
   //kprintf("To be implemented!\n");
+  STATWORD ps;
+  disable(ps);
+  int pageNumber;
+  int index;
+  int frameID;
+  int storeID;
+  int checkType;
+  unsigned long virtualAddress;
+  unsigned int pageTable;
+  unsigned int pageDirectory;
+  unsigned long pdbr;
+  pd_t *pd_entry;
+  pt_t *pt_entry;
 
+  index = i;
+  checkType = frm_tab[index].fr_type;
+
+  if (checkType == SETZERO) {
+    int v_p_n_o = frm_tab[index].fr_vpno;
+    virtualAddress = v_p_n_o;
+
+    int p_i_d = frm_tab[index].fr_pid;
+    frameID = p_i_d;
+
+    int p_d_b_r = frm_tab[p_i_d].pdbr;
+    pdbr = p_d_b_r;
+
+    int andVal = TWOTEN - 1;
+    pageTable = virtualAddress & andVal;
+
+    int shiftVal = SETONE * 10;
+    pageDirectory = virtualAddress >> shiftVal;
+
+    int proctabStore = proctab[p_i_d].store;
+    storeID = proctabStore;
+
+    int a = sizeof(pd_t);
+    int b = pageDirectory;
+    int mult = b * a;
+    int c = pdbr;
+    int add = c + mult;
+    pd_entry = add;
+
+    int d = sizeof(pt_t);
+    int e = pageTable;
+    int multTwo = d * e;
+    int twoFourTen = TWOTEN * 4;
+    int f = pd_entry->pd_base;
+    int multThree = twoFourTen * f;
+    int addTwo = multTwo + multThree;
+    pt_entry = addTwo;
+
+    int proctabVh = proctab[p_i_d].vhpno;
+    pageNumber = v_p_n_o - proctabVh;
+
+    int indexFrame = index + TWOTEN;
+    indexFrame = indexFrame * twoFourTen;
+    write_bs(indexFrame, storeID, pageNumber);
+
+    pt_entry->pt_pres = SETZERO;
+    int frameIndex = f - TWOTEN;
+
+    if (frm_tab[frameIndex].fr_refcnt-- == SETZERO) {
+      /* code */
+      frm_tab[frameIndex].fr_pid    = -SETONE;
+      frm_tab[frameIndex].fr_status = SETZERO;
+      frm_tab[frameIndex].fr_vpno   = twoFourTen;
+      frm_tab[frameIndex].fr_type   = SETZERO;
+    }
+
+   }
+
+   restore(ps);
   return OK;
 }
 
