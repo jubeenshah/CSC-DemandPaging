@@ -8,6 +8,11 @@
 #include <io.h>
 #include <q.h>
 #include <stdio.h>
+#include <paging.h>
+
+#define SETZERO 0
+#define SETONE  1
+#define TWOTEN  1024
 
 /*------------------------------------------------------------------------
  * kill  --  kill a process and remove it from the system
@@ -15,7 +20,7 @@
  */
 SYSCALL kill(int pid)
 {
-	STATWORD ps;    
+	STATWORD ps;
 	struct	pentry	*pptr;		/* points to proc. table for pid*/
 	int	dev;
 
@@ -36,7 +41,7 @@ SYSCALL kill(int pid)
 	dev = pptr->ppagedev;
 	if (! isbaddev(dev) )
 		close(dev);
-	
+
 	send(pptr->pnxtkin, pid);
 
 	freestk(pptr->pbase, pptr->pstklen);
@@ -56,6 +61,27 @@ SYSCALL kill(int pid)
 						/* fall through	*/
 	default:	pptr->pstate = PRFREE;
 	}
+	int persistStoreVal = proctab[pid].store;
+	STATWORD ps;
+	disable(ps);
+	int index = SETZERO;
+
+	while (index < TWOTEN) {
+		/* code */
+		int checkP_i_d = frm_tab[index].fr_pid;
+		if (checkP_i_d != pid) {
+			/* code */
+			continue;
+		}
+		frm_tab[index].fr_status 	= SETZERO;
+		frm_tab[index].fr_pid		 	= -SETONE;
+		frm_tab[index].fr_vpno		= TWOTEN * 4;
+		frm_tab[index].fr_refcnt	= SETZERO;
+		frm_tab[index].fr_type		= SETZERO;
+		frm_tab[index].fr_dirty 	= SETZERO;
+		index = index + 1;
+	}
+	restore(ps);
 	restore(ps);
 	return(OK);
 }
