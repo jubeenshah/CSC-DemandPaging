@@ -66,6 +66,7 @@ typedef struct{
 
 extern bs_map_t bsm_tab[];
 extern fr_map_t frm_tab[];
+
 /* Prototypes for required API calls */
 SYSCALL xmmap(int, bsd_t, int);
 SYSCALL xunmap(int);
@@ -97,9 +98,6 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define BACKING_STORE_BASE	0x00800000
 #define BACKING_STORE_UNIT_SIZE 0x00100000
 
-/*Edits
-extern int scA[]
-scPointer
-#define NBACKINGSTORE 8
-pages per backing store ?
-*/
+
+extern int scA[];
+extern int scPointer;
