@@ -18,7 +18,49 @@ extern struct pentry proctab[];
 WORD	*vgetmem(nbytes)
 	unsigned nbytes;
 {
+	STATWORD ps;
+	struct mblock *index;
+	struct mblock *indexDos;
+	struct mblock *indexTres;
+	//kprintf("To be implemented!\n");
 
-	kprintf("To be implemented!\n");
-	return( SYSERR );
+int checkList = proctab[currpid].vmemlist->mnext;
+
+if (nbytes == SETZERO || checkList == (struct mblock*)NULL) {
+	/* code */
+	restore(ps);
+	return -SETONE;
+}
+
+int listFor;
+nbytes = (unsigned int)roundmb(nbytes);
+listFor = proctab[currpid].vmemlist;
+indexDos = &listFor;
+index = indexDos->mnext;
+while (index != (struct mblock *)NULL) {
+	/* code */
+	int checkMlen = index->mlen;
+	if (checkMlen == nytes) {
+		/* code */
+		indexDos->mnext = index->mnext;
+		restore (ps);
+		return ((WORD*)p);
+	} else if(checkMlen > nbytes) {
+		int conv = (unsigned)p + nbytes;
+		indexTres = (struct mblock *) (conv);
+
+		indexDos->mnext = indexTres;
+		indexTres->mnext = index->mnext;
+		int sub = index->mlen - nbytes;
+		indexTres->mlen = sub;
+
+		restore(ps);
+		return ((WORD*)p);
+	}
+
+	indexDos = index;
+	index = index->mnext;
+}
+	restore(ps);
+	return((WORD*) -SETONE );
 }
