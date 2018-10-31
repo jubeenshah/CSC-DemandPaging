@@ -3,6 +3,7 @@
 
 #include <conf.h>
 #include <kernel.h>
+#include <proc.h>
 
 unsigned long tmp;
 
@@ -118,7 +119,7 @@ void write_cr0(unsigned long n) {
 
   tmp = n;
   asm("pushl %eax");
-  asm("movl tmp, %eax");		/* mov (move) value at tmp into %eax register. 
+  asm("movl tmp, %eax");		/* mov (move) value at tmp into %eax register.
 					   "l" signifies long (see docs on gas assembler)	*/
   asm("movl %eax, %cr0");
   asm("popl %eax");
@@ -177,14 +178,24 @@ void write_cr4(unsigned long n) {
 
 
 /*-------------------------------------------------------------------------
- * enable_pagine - enable paging 
+ * enable_pagine - enable paging
  *-------------------------------------------------------------------------
  */
 void enable_paging(){
-  
+
   unsigned long temp =  read_cr0();
   temp = temp | ( 0x1 << 31 ) | 0x1;
-  write_cr0(temp); 
+  write_cr0(temp);
 }
 
+void pdbr_init (int pid) {
+  STATWORD ps;
+  disable(ps);
+  unsigned long pdbr = proctab[pid].pdbr;
+  asm("pushl %eax");
+  asm("movl pdbr, %eax");
 
+  asm("movl %eax, %cr3");
+  asm("popl %eax");
+  restore(ps);
+}
