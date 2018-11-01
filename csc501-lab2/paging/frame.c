@@ -166,11 +166,11 @@ int get_frm_SC(){
 	while(1){
 		i=i%NFRAMES;
 		if(frm_tab[i].fr_type==FR_PAGE){
-			if(sc_acc[i]==1){
-				sc_acc[i]=0;
+			if(scA[i]==1){
+				scA[i]=0;
 			}
 			else{
-				sc_ptr=i+1;
+				scPointer=i+1;
 //				kprintf("get frm %d ------SC \n",i);
 				restore(ps);
 				return i;
