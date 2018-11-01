@@ -127,7 +127,7 @@ void createPageDir(int i) {
   int index = i;
 
   int frameAvail = SETZERO;
-  pd_t * pd_entry;
+  pd_t *pd_entry;
   get_frm(&frameAvail);
 
   int a = TWOTEN + frameAvail;
@@ -135,18 +135,18 @@ void createPageDir(int i) {
   proctab[index].pdbr = a;
   frm_tab[frameAvail].fr_status = SETONE;
   frm_tab[frameAvail].fr_type   = SETONE * 2;
-  frm_tab[frameAvail].fr_pid    = index
+  frm_tab[frameAvail].fr_pid    = index;
   pd_entry = a;
   int indexDos = SETZERO;
   int sizeIs = sizeof(pt_t);
-  int limit = (TWOTEN * 4) / sizeIs
+  int limit = (TWOTEN * 4) / sizeIs;
   while (indexDos < limit) {
     /* code */
     pd_entry[indexDos].pd_write = SETONE;
     int limitDos = SETONE * 4;
     if (indexDos < limitDos) {
       /* code */
-      int addIs = TWOTEN + indexDos
+      int addIs = TWOTEN + indexDos;
       pd_entry[indexDos].pd_base = addIs;
       pd_entry[indexDos].pd_pres = SETONE;
     }
