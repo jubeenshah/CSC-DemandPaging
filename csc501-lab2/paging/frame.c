@@ -53,8 +53,9 @@ SYSCALL init_frm(){
  */
 SYSCALL get_frm(int* avail){
 
+kprintf(page_replace_policy);
   kprintf("get_frm star!\n");
-  kprintf(page_replace_policy);
+
   STATWORD ps;
   disable(ps);
 
