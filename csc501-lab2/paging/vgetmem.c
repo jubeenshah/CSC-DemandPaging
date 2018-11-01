@@ -40,7 +40,7 @@ index = indexDos->mnext;
 while (index != (struct mblock *)NULL) {
 	/* code */
 	int checkMlen = index->mlen;
-	if (checkMlen == nytes) {
+	if (checkMlen == nbytes) {
 		/* code */
 		indexDos->mnext = index->mnext;
 		restore (ps);
@@ -55,7 +55,7 @@ while (index != (struct mblock *)NULL) {
 		indexTres->mlen = sub;
 
 		restore(ps);
-		return ((WORD*)p);
+		return ((WORD*)index);
 	}
 
 	indexDos = index;
