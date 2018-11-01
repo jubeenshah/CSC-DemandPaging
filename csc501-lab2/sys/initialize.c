@@ -181,7 +181,7 @@ nulluser()				/* babysit CPU when no one is home */
 	/* create a process to execute the user's main program */
 	userpid = create(main,INITSTK,INITPRIO,INITNAME,INITARGS);
 	resume(userpid);
-  kprintf("going to main after");
+  //kprintf("going to main after");
 	while (TRUE)
 		/* empty */;
 }
