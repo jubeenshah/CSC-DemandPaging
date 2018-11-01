@@ -1,7 +1,5 @@
 /* paging.h */
 
-#ifndef _PAGING_H_
-#define _PAGING_H_
 
 typedef unsigned int	 bsd_t;
 
