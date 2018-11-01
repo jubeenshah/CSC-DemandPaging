@@ -192,10 +192,6 @@ void pdbr_init (int pid) {
   STATWORD ps;
   disable(ps);
   unsigned long pdbr = proctab[pid].pdbr;
-  asm("pushl %eax");
-  asm("movl pdbr, %eax");
-
-  asm("movl %eax, %cr3");
-  asm("popl %eax");
+  write_cr3(pdbr);
   restore(ps);
 }
