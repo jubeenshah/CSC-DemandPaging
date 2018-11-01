@@ -49,6 +49,9 @@ SYSCALL init_bsm(){
 
     index = index + SETONE;
   }
+
+  restore(ps);
+  return OK;
 }
 
 /*-------------------------------------------------------------------------
