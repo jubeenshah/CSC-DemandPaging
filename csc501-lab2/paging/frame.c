@@ -69,7 +69,7 @@ SYSCALL get_frm(int* avail){
     int checkStatus = frm_tab[index].fr_status;
     //kprintf("Test %d", checkStatus);
     if (checkStatus == SETZERO) {
-      //kprintf("IN");
+      kprintf("IN");
       *avail = index;
       scA[index] = SETONE;
       restore(ps);
