@@ -130,7 +130,7 @@ void createPageDir(int i) {
   int frameAvail = SETZERO;
   pd_t *pd_entry;
   get_frm(&frameAvail);
-	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
+	kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
 
   int a = TWOTEN + frameAvail;
   a = a * TWOTEN * 4;
