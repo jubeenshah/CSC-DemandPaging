@@ -1,4 +1,4 @@
-/* kill.c - kill */
+```/* kill.c - kill */
 
 #include <conf.h>
 #include <kernel.h>
@@ -87,3 +87,4 @@ SYSCALL kill(int pid)
 	restore(ps);
 	return(OK);
 }
+```
