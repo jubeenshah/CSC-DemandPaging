@@ -178,12 +178,12 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
         }
         int twotenI = TWOTEN + index;
         int mult = twotenI * twoFourTen;
+        kprintf("write_bs pid:%d vaddr:%08x store:%d pageth:%d\n",pid,vaddr,store,pageth);
         write_bs(mult, proctabStore, pageth);
     //  }
     }
     index = index + SETONE;
   }
-
   restore(ps);
   return OK;
 }
