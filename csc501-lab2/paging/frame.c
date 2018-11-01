@@ -67,7 +67,7 @@ SYSCALL get_frm(int* avail){
   while (index < TWOTEN) {
     /* code */
     int checkStatus = frm_tab[index].fr_status;
-    //kprintf("Test %d", checkStatus);
+    kprintf("Test %d", checkStatus);
     if (checkStatus == SETZERO) {
       kprintf("IN");
       *avail = index;
