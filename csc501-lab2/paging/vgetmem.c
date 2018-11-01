@@ -46,7 +46,7 @@ while (index != (struct mblock *)NULL) {
 		restore (ps);
 		return ((WORD*)index);
 	} else if(checkMlen > nbytes) {
-		int conv = (unsigned)p + nbytes;
+		int conv = (unsigned)index + nbytes;
 		indexTres = (struct mblock *) (conv);
 
 		indexDos->mnext = indexTres;
