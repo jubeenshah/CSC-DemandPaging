@@ -81,7 +81,7 @@ void initializeDemandPaging() {
   int index       = SETZERO;
   int indexDos    = SETZERO;
 
-
+ kprintf("INIT DEMANDS PAGINF");
   init_bsm();
   init_frm();
   int frameNumber = SETZERO;
@@ -121,8 +121,8 @@ void initializeDemandPaging() {
     }
     index = index + SETONE;
   }
-  createPageDir(SETZERO);
-  pdbr_init(SETZERO);
+  createPageDir(NULLPROC);
+  pdbr_init(NULLPROC);
   //int set_evec(unsigned int xnum, u_long handler)
   int chouda = SETONE * 14;
   set_evec(chouda, pfintr);
