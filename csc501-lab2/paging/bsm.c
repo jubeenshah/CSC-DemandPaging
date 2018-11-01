@@ -181,6 +181,7 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
         write_bs(mult, proctabStore, pageth);
     //  }
     }
+    index = index + SETONE;
   }
 
   restore(ps);
