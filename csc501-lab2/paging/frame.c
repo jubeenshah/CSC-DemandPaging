@@ -76,6 +76,7 @@ SYSCALL get_frm(int* avail){
   }
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
+    kprintf("replacement policy = SC")
     frameNumber = getFrameSC();
     free_frm(frameNumber);
     scA[frameNumber] = SETONE;
