@@ -67,9 +67,9 @@ SYSCALL get_frm(int* avail){
   while (index < TWOTEN) {
     /* code */
     int checkStatus = frm_tab[index].fr_status;
-    kprintf("Test %d", checkStatus);
+    //kprintf("Test %d", checkStatus);
     if (checkStatus == SETZERO) {
-      kprintf("IN");
+      //kprintf("IN");
       *avail = index;
       scA[index] = SETONE;
       restore(ps);
@@ -77,11 +77,11 @@ SYSCALL get_frm(int* avail){
     }
     index = index + 1;
   }
-  kprintf("OUT%d\n",page_replace_policy);
+  //kprintf("OUT%d\n",page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
     kprintf();
-    kprintf("replacement policy = SC");
+    //kprintf("replacement policy = SC");
     frameNumber = getFrameSC();
     free_frm(frameNumber);
     scA[frameNumber] = SETONE;
@@ -89,7 +89,7 @@ SYSCALL get_frm(int* avail){
     restore(ps);
     return OK;
   }
-  kprintf("get frm end!\n");
+  //kprintf("get frm end!\n");
   restore(ps);
   return SYSERR;
 }
