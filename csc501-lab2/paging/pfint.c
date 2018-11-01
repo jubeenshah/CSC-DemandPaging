@@ -146,14 +146,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
       }
 
 
-  STATWORD ps3;
-  disable(ps3);
-  asm("pushl %eax");
-  asm("movl pdbr, %eax");                /* mov (move) value at tmp into %eax register.
-                                           "l" signifies long (see docs on gas assembler)       */
-  asm("movl %eax, %cr3");
-  asm("popl %eax");
-  restore(ps3);
+  write_cr3(pdbr);
 
   restore(ps);
   return OK;
