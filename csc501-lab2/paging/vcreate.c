@@ -56,7 +56,7 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
   proctab[pid].vhpnpages = hsize;
   int list = getmem(sizeof(struct mblock *));
   proctab[pid].vmemlist = list;
-  int next = (struct mblock *)(twoFourTen * NBPG);
+  int next = (struct mblock *)(twoFourTen * twoFourTen);
   proctab[pid].vmemlist->mnext = next;
   proctab[pid].vmemlist->mlen = SETZERO;
 
@@ -67,7 +67,7 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
   baseblock->mnext = NULL;
 
   restore(ps);
-	return OK;
+	return pid;
 }
 
 /*------------------------------------------------------------------------
