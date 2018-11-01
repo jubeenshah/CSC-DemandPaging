@@ -148,7 +148,7 @@ void createPageDir(int i) {
   int limit = (TWOTEN * 4) / sizeIs;
   while (indexDos < limit) {
     /* code */
-		kprintf("Loop");
+		kprintf("%d", indexDos);
     pd_entry[indexDos].pd_write = SETONE;
     int limitDos = SETONE * 4;
     if (indexDos < limitDos) {
