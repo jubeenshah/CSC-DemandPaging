@@ -47,7 +47,7 @@ SYSCALL	vfreemem(block, size)
 		top = h;
 		int e = &proctab[currpid].vmemlist;
 		int at = size + (unsigned)block;
-		if ((top > unsigned(block) && indexDos != e) || (index != NULL && (at > (unsigned)index ) )) {
+		if ((top > (unsigned)block && indexDos != e) || (index != NULL && (at > (unsigned)index ) )) {
 			/* code */
 			restore(ps);
 			return -SETONE;
