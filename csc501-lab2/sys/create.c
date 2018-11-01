@@ -14,6 +14,7 @@ LOCAL int newpid();
 #define SETONE  1
 #define SETZERO 0
 #define TWOTEN  1024
+
 void createPageDir(int i);
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
@@ -99,7 +100,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %esi */
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
-
+	createPageDir(pid);
 	restore(ps);
 
 	return(pid);
