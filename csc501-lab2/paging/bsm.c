@@ -102,7 +102,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
 
   STATWORD ps;
 	disable(ps);
-
+  kprintf("bsm_lookup");
   int index = SETZERO;
   int starth = vaddr & ANDVAL;
   int startp = starth >> 12;
