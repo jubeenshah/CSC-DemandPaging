@@ -32,7 +32,7 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
 	long	args;			/* arguments (treated like an	*/
 					/* array in the code)		*/
 {
-	//kprintf("To be implemented!\n");
+	kprintf(" VCREATE To be implemented!\n");
 
   STATWORD ps;
   disable(ps);

@@ -10,7 +10,7 @@
 SYSCALL release_bs(bsd_t bs_id) {
 
   /* release the backing store with ID bs_id */
-    //kprintf("To be implemented!\n");
+    kprintf("RELEASE_BSTo be implemented!\n");
     STATWORD ps;
     disable(ps);
     int index = bs_id;

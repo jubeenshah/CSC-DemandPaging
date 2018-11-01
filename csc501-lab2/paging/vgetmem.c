@@ -22,7 +22,7 @@ WORD	*vgetmem(nbytes)
 	struct mblock *index;
 	struct mblock *indexDos;
 	struct mblock *indexTres;
-	//kprintf("To be implemented!\n");
+	kprintf("VGETMEM To be implemented!\n");
 
 int checkList = proctab[currpid].vmemlist->mnext;
 

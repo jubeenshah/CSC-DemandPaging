@@ -125,7 +125,7 @@ int pageCreate() {
   STATWORD ps;
   disable(ps);
   int index = SETZERO;
-  //kprintf("To be implemented!\n");
+  kprintf("PFINT To be implemented!\n");
   int frameNumber;
   unsigned int frameAddress;
 

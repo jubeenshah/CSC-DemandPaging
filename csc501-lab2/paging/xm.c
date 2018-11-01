@@ -15,7 +15,7 @@
  */
 SYSCALL xmmap(int virtpage, bsd_t source, int npages)
 {
-  //kprintf("xmmap - to be implemented!\n");
+  kprintf("xmmap - to be implemented!\n");
   STATWORD ps;
   disable(ps);
 
