@@ -68,10 +68,10 @@ SYSCALL	vfreemem(block, size)
 		int a00 = indexDos->mlen;
 		int a01 = (unsigned)(indexDos);
 		int a02 = a00 + a01;
-		int b00 = (unsigned)index
+		int b00 = (unsigned)index;
 		if (a02 == b00) {
 			/* code */
-			int addDos = indexDos->mlen
+			int addDos = indexDos->mlen;
 			indexDos->mlen = addDos + index->mlen;
 			indexDos->mnext = index->mnext;
 		}
