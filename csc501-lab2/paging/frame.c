@@ -54,6 +54,7 @@ SYSCALL init_frm(){
 SYSCALL get_frm(int* avail){
 
   kprintf("get_frm star!\n");
+  kprintf(page_replace_policy);
   STATWORD ps;
   disable(ps);
 
@@ -74,7 +75,7 @@ SYSCALL get_frm(int* avail){
     }
     index = index + 1;
   }
-  kprintf(page_replace_policy);
+  //kprintf(page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
     kprintf();
