@@ -14,7 +14,7 @@
  *-------------------------------------------------------------------------
  */
 SYSCALL init_bsm(){
-
+kprintf("INIT BSM");
   STATWORD ps;
   disable(ps);
 
