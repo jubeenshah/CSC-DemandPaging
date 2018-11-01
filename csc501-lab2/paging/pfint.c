@@ -155,5 +155,5 @@ int pageCreate() {
     index = index + 1;
   }
   restore(ps);
-  return frameNumber
+  return frameNumber;
 }
