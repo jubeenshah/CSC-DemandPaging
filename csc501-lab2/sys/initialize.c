@@ -294,9 +294,9 @@ void initializeDemandPaging() {
   while (index < limitA) {
     /* code */
     get_frm(&frameNumber);
-    frm_tab[frameNumber].fr_status = SETONE;
-    frm_tab[frameIndex].fr_type    = SETONE;
-    frm_tab[frameIndex].fr_pid     = SETZERO;
+    frm_tab[frameNumber].fr_status  = SETONE;
+    frm_tab[frameNumber].fr_type    = SETONE;
+    frm_tab[frameNumber].fr_pid     = SETZERO;
 
     int a = TWOTEN + frameNumber;
     a = a * TWOTEN * 4;
