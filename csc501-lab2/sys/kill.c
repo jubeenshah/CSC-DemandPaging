@@ -87,4 +87,3 @@ SYSCALL kill(int pid)
 	restore(ps);
 	return(OK);
 }
-```
