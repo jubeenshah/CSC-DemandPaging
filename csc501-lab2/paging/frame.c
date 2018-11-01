@@ -74,8 +74,10 @@ SYSCALL get_frm(int* avail){
     }
     index = index + 1;
   }
+  kprintf(page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
+    kprintf();
     kprintf("replacement policy = SC");
     frameNumber = getFrameSC();
     free_frm(frameNumber);
