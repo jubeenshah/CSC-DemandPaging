@@ -33,9 +33,9 @@ if (nbytes == SETZERO || checkList == (struct mblock*)NULL) {
 }
 
 int listFor;
-nbytes = (unsigned int)roundmb(nbytes);
-listFor = proctab[currpid].vmemlist;
-indexDos = &listFor;
+nbytes = (unsigned int) roundmb(nbytes);
+listFor = &proctab[currpid].vmemlist;
+indexDos = listFor;
 index = indexDos->mnext;
 while (index != (struct mblock *)NULL) {
 	/* code */

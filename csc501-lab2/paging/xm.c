@@ -19,10 +19,7 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   STATWORD ps;
   disable(ps);
 
-  int c = currpid;
-  int v = virtpage;
-  int s = source;
-  int n = npages;
+
   if (virtpage < (4*TWOTEN) || source < SETZERO || source >= (TWOTEN/128) || npages < SETONE || npages > (TWOTEN / 4)) {
     /* code */
     restore(ps);
@@ -43,11 +40,14 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
     restore(ps);
     return -SETONE;
   }
-
+  int c = currpid;
+  int v = virtpage;
+  int s = source;
+  int n = npages;
   bsm_map(c,v,s,n);
 
   restore(ps);
-  return SETONE;
+  return OK;
 }
 
 
