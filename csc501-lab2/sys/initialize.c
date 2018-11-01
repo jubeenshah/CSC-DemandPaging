@@ -81,7 +81,7 @@ void initializeDemandPaging() {
   int index       = SETZERO;
   int indexDos    = SETZERO;
 
- kprintf("INIT DEMANDS PAGINF");
+ //kprintf("INIT DEMANDS PAGINF");
   init_bsm();
   init_frm();
   int frameNumber = SETZERO;
@@ -177,10 +177,11 @@ nulluser()				/* babysit CPU when no one is home */
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
 
 
+  kprintf("going to main");
 	/* create a process to execute the user's main program */
 	userpid = create(main,INITSTK,INITPRIO,INITNAME,INITARGS);
 	resume(userpid);
-
+  kprintf("going to main after");
 	while (TRUE)
 		/* empty */;
 }
