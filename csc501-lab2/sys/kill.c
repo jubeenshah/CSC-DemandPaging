@@ -63,26 +63,27 @@ SYSCALL kill(int pid)
 	}
 	int persistStoreVal = proctab[pid].store;
 	release_bs(persistStoreVal);
-	STATWORD ps2;
-	disable(ps2);
-	int index = SETZERO;
-
-	while (index < TWOTEN) {
-		/* code */
-		int checkP_i_d = frm_tab[index].fr_pid;
-		if (checkP_i_d != pid) {
-			/* code */
-			continue;
-		}
-		frm_tab[index].fr_status 	= SETZERO;
-		frm_tab[index].fr_pid		 	= -SETONE;
-		frm_tab[index].fr_vpno		= TWOTEN * 4;
-		frm_tab[index].fr_refcnt	= SETZERO;
-		frm_tab[index].fr_type		= SETZERO;
-		frm_tab[index].fr_dirty 	= SETZERO;
-		index = index + SETONE;
-	}
-	restore(ps2);
+	// STATWORD ps2;
+	// disable(ps2);
+	// int index = SETZERO;
+	//
+	// while (index < TWOTEN) {
+	// 	/* code */
+	// 	int checkP_i_d = frm_tab[index].fr_pid;
+	// 	if (checkP_i_d != pid) {
+	// 		/* code */
+	// 		continue;
+	// 	}
+	// 	frm_tab[index].fr_status 	= SETZERO;
+	// 	frm_tab[index].fr_pid		 	= -SETONE;
+	// 	frm_tab[index].fr_vpno		= TWOTEN * 4;
+	// 	frm_tab[index].fr_refcnt	= SETZERO;
+	// 	frm_tab[index].fr_type		= SETZERO;
+	// 	frm_tab[index].fr_dirty 	= SETZERO;
+	// 	index = index + SETONE;
+	// }
+	// restore(ps2);
+	frameDefine(pid);
 	restore(ps);
 	return(OK);
 }
