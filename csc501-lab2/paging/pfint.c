@@ -57,40 +57,8 @@ virt_addr = (virt_addr_t *)&virtualAddress;
   int checkPresVal = pd_entry->pd_pres;
 
   if (checkPresVal == SETZERO){
-    STATWORD ps2;
-    disable(ps2);
-    int index = SETZERO;
-    //kprintf("To be implemented!\n");
-    int frameNumber;
-    unsigned int frameAddress;
 
-    get_frm(&frameNumber);
-    int twoFourTen = TWOTEN * 4;
-
-    frameAddress = TWOTEN + frameNumber;
-    frameAddress = frameAddress * twoFourTen;
-
-    //pt_t *pageTable;
-    pageTable = (pt_t *)frameAddress;
-
-    while (index < TWOTEN) {
-      /* code */
-      pageTable[index].pt_pres  = SETZERO;
-      pageTable[index].pt_write = SETZERO;
-      pageTable[index].pt_user  = SETZERO;
-      pageTable[index].pt_pwt   = SETZERO;
-      pageTable[index].pt_pcd   = SETZERO;
-      pageTable[index].pt_acc   = SETZERO;
-      pageTable[index].pt_dirty = SETZERO;
-      pageTable[index].pt_mbz   = SETZERO;
-      pageTable[index].pt_global= SETZERO;
-      pageTable[index].pt_avail = SETZERO;
-      pageTable[index].pt_base  = SETZERO;
-
-      index = index + 1;
-    }
-    restore(ps2);
-    newPageTable = frameNumber;
+    newPageTable = pageCreate();
 
     pd_entry->pd_pres   = SETONE;
     pd_entry->pd_write  = SETONE;
@@ -151,4 +119,41 @@ virt_addr = (virt_addr_t *)&virtualAddress;
   restore(ps);
   return OK;
 
+}
+
+int pageCreate() {
+  STATWORD ps;
+  disable(ps);
+  int index = SETZERO;
+  //kprintf("To be implemented!\n");
+  int frameNumber;
+  unsigned int frameAddress;
+
+  get_frm(&frameNumber);
+  int twoFourTen = TWOTEN * 4;
+
+  frameAddress = TWOTEN + frameNumber;
+  frameAddress = frameAddress * twoFourTen;
+
+  //pt_t *pageTable;
+  pt_t *pageTable = (pt_t *)frameAddress;
+
+  while (index < TWOTEN) {
+    /* code */
+    pageTable[index].pt_pres  = SETZERO;
+    pageTable[index].pt_write = SETZERO;
+    pageTable[index].pt_user  = SETZERO;
+    pageTable[index].pt_pwt   = SETZERO;
+    pageTable[index].pt_pcd   = SETZERO;
+    pageTable[index].pt_acc   = SETZERO;
+    pageTable[index].pt_dirty = SETZERO;
+    pageTable[index].pt_mbz   = SETZERO;
+    pageTable[index].pt_global= SETZERO;
+    pageTable[index].pt_avail = SETZERO;
+    pageTable[index].pt_base  = SETZERO;
+
+    index = index + 1;
+  }
+  restore(ps);
+  return frameNumber
 }
