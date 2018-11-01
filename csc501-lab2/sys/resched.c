@@ -111,7 +111,27 @@ int	resched()
 		}
 		index = index + SETONE;
 	}
+index = SETZERO;
+	while (index < TWOTEN) {
+		/* code */
+		int checkPIDNew = frm_tab[index].fr_pid;
+		int checkTypeNew = frm_tab[index].fr_type;
 
+		if (checkPIDNew == currpid && checkTypeNew == SETZERO) {
+			/* code */
+			int vpnoTolookup = frm_tab[index].fr_vpno;
+			vpnoTolookup = vpnoTolookup * TWOTEN * 4;
+			hasToLookup = bsm_lookup(currpid, vpnoTolookup, &store, &pageth);
+			if (hasToLookup == -SETONE) {
+				continue;
+			}
+			int frameInt = index + TWOTEN;
+			frameInt = frameInt * TWOTEN * 4;
+			read_bs(frameInt, store, pageth);
+		}
+		index = index + SETONE;
+	}
+	pdbr_init(currpid);
 	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
 
 #ifdef	DEBUG
