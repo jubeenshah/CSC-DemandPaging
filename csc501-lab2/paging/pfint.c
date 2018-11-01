@@ -143,7 +143,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
       }
 
-  }
+  
   STATWORD ps3;
   disable(ps3);
   asm("pushl %eax");
