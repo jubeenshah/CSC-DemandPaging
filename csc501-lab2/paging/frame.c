@@ -118,7 +118,7 @@ SYSCALL free_frm(int i)
 	return OK;
 }
 
-void out_frm(int pid){
+void frameDefine(int pid){
 	STATWORD ps;
 	disable(ps);
 	int i=0;
