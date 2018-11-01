@@ -45,9 +45,9 @@ SYSCALL	vfreemem(block, size)
 		int c = indexDos->mlen;
 		int h = c + (unsigned)indexDos;
 		top = h;
-		int e = &proctab[currpid].vmemlist
+		int e = &proctab[currpid].vmemlist;
 		int at = size + (unsigned)block;
-		if ((top > unsigned(block) && indexDos != e) || (index != NULL && (at > (unsigned)p ) ) {
+		if ((top > unsigned(block) && indexDos != e) || (index != NULL && (at > (unsigned)index ) )) {
 			/* code */
 			restore(ps);
 			return -SETONE;
@@ -56,7 +56,7 @@ SYSCALL	vfreemem(block, size)
 
 		if (indexDos != &memlist && top == ed) {
 			/* code */
-			int add = indexDos->mlen
+			int add = indexDos->mlen;
 			indexDos->mlen =  add + size;
 		} else {
 			int s = size;
@@ -68,7 +68,7 @@ SYSCALL	vfreemem(block, size)
 		int a00 = indexDos->mlen;
 		int a01 = (unsigned)(indexDos);
 		int a02 = a00 + a01;
-		int b00 = (unsigned)p
+		int b00 = (unsigned)index
 		if (a02 == b00) {
 			/* code */
 			int addDos = indexDos->mlen
