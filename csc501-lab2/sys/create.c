@@ -158,4 +158,5 @@ void createPageDir(int i) {
     }
     indexDos = indexDos + SETONE;
   }
+	kprintf("DONE PID : %d", i);
 }
