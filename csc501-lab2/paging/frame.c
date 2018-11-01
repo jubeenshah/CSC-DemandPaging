@@ -41,7 +41,7 @@ SYSCALL init_frm(){
 
     scA[index]  = SETZERO;
     scPointer   = SETZERO;
-    index = index + 1;
+    index = index + SETONE;
   }
   restore(ps);
   return OK;
@@ -79,7 +79,6 @@ SYSCALL get_frm(int* avail){
     free_frm(frameNumber);
     scA[frameNumber] = SETONE;
     *avail = frameNumber;
-
     restore(ps);
     return OK;
   }
@@ -120,7 +119,7 @@ SYSCALL free_frm(int i)
     int p_i_d = frm_tab[index].fr_pid;
     frameID = p_i_d;
 
-    int p_d_b_r = proctab[p_i_d].pdbr;
+    int p_d_b_r = proctab[frameID].pdbr;
     pdbr = p_d_b_r;
 
     int andVal = TWOTEN - 1;
@@ -129,7 +128,7 @@ SYSCALL free_frm(int i)
     int shiftVal = SETONE * 10;
     pageDirectory = virtualAddress >> shiftVal;
 
-    int proctabStore = proctab[p_i_d].store;
+    int proctabStore = proctab[frameID].store;
     storeID = proctabStore;
 
     int a = sizeof(pd_t);
@@ -148,8 +147,9 @@ SYSCALL free_frm(int i)
     int addTwo = multTwo + multThree;
     pt_entry = addTwo;
 
-    int proctabVh = proctab[p_i_d].vhpno;
-    pageNumber = v_p_n_o - proctabVh;
+    int proctabVh = proctab[frameID].vhpno;
+    int v_p_n_o_dos = frm_tab[index].fr_vpno;
+    pageNumber = v_p_n_o_dos - proctabVh;
 
     int indexFrame = index + TWOTEN;
     indexFrame = indexFrame * twoFourTen;
@@ -162,7 +162,7 @@ SYSCALL free_frm(int i)
       /* code */
       frm_tab[frameIndex].fr_pid    = -SETONE;
       frm_tab[frameIndex].fr_status = SETZERO;
-      frm_tab[frameIndex].fr_vpno   = twoFourTen;
+      frm_tab[frameIndex].fr_vpno   = TWOTEN * 4;
       frm_tab[frameIndex].fr_type   = SETZERO;
     }
 

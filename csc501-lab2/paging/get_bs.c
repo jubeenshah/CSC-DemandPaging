@@ -33,6 +33,7 @@ disable(ps);
     if (checkPrivateValue == SETZERO && checkStatus == SETONE) {
       /* code */
       restore(ps);
+      pagesValue = bsm_tab[bs_id].bs_npages;
       return pagesValue;
     }
 
