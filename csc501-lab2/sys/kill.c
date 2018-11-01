@@ -1,4 +1,4 @@
-```/* kill.c - kill */
+/* kill.c - kill */
 
 #include <conf.h>
 #include <kernel.h>
