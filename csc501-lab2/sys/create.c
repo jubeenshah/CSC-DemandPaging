@@ -102,7 +102,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*pushsp = pptr->pesp = (unsigned long)saddr;
 	createPageDir(pid);
 	restore(ps);
-
+	kprintf("DONE PID : %d", pid);
 	return(pid);
 }
 
@@ -129,9 +129,9 @@ void createPageDir(int i) {
 
   int frameAvail = SETZERO;
   pd_t *pd_entry;
-	kprintf("Just before");
+	//kprintf("Just before");
   get_frm(&frameAvail);
-	kprintf("create page directory in frame %d for pid %d\n",&frameAvail,index);
+	//kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
 
   int a = TWOTEN + frameAvail;
   a = a * TWOTEN * 4;
