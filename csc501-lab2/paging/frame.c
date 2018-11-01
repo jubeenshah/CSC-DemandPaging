@@ -64,6 +64,18 @@ SYSCALL get_frm(int* avail){
 
   int frameNumber;
 
+  if (page_replace_policy == 3) { // 3 = Second Chance
+    /* code */
+    kprintf("SC");
+    //kprintf("replacement policy = SC");
+    frameNumber = getFrameSC();
+    free_frm(frameNumber);
+    scA[frameNumber] = SETONE;
+    *avail = frameNumber;
+    restore(ps);
+    return OK;
+  }
+  
   while (index < TWOTEN) {
     /* code */
     int checkStatus = frm_tab[index].fr_status;
@@ -80,7 +92,7 @@ SYSCALL get_frm(int* avail){
   //kprintf("OUT%d\n",page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
-    kprintf();
+    kprintf("SC");
     //kprintf("replacement policy = SC");
     frameNumber = getFrameSC();
     free_frm(frameNumber);
