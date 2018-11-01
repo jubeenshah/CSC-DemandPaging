@@ -611,22 +611,22 @@ void test_func8_2()
   }
 }
 
-void test8(){
-  int pid1;
-  int ret = TPASSED;
-  kprintf("\nTest 8: Test LFU page replacement policy\n");
-  srpolicy(LFU);
-  pid1 = create(test_func8, 2000, 20, "test_func8", 0, NULL);
-  resume(pid1);
-  sleep(10);
-  kill(pid1);
-  kprintf("\n\tSecond run (test where killing process is handled correctly):\n");
-  pid1 = create(test_func8_2, 2000, 20, "test_func8_2", 0, NULL);
-  resume(pid1);
-  sleep(10);
-  kill(pid1);
-  kprintf("\n\tFinished! Check error and replaced frames\n");
-}
+// void test8(){
+//   int pid1;
+//   int ret = TPASSED;
+//   kprintf("\nTest 8: Test LFU page replacement policy\n");
+//   srpolicy(LFU);
+//   pid1 = create(test_func8, 2000, 20, "test_func8", 0, NULL);
+//   resume(pid1);
+//   sleep(10);
+//   kill(pid1);
+//   kprintf("\n\tSecond run (test where killing process is handled correctly):\n");
+//   pid1 = create(test_func8_2, 2000, 20, "test_func8_2", 0, NULL);
+//   resume(pid1);
+//   sleep(10);
+//   kill(pid1);
+//   kprintf("\n\tFinished! Check error and replaced frames\n");
+// }
 
 
 void proc1_test9(char *msg, int lck) {
