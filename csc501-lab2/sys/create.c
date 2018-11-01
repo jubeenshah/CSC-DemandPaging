@@ -130,17 +130,20 @@ void createPageDir(int i) {
   int frameAvail = SETZERO;
   pd_t *pd_entry;
   get_frm(&frameAvail);
-	kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
+	//kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
 
   int a = TWOTEN + frameAvail;
   a = a * TWOTEN * 4;
   proctab[index].pdbr = a;
   frm_tab[frameAvail].fr_status = SETONE;
   frm_tab[frameAvail].fr_type   = SETONE * 2;
-  frm_tab[frameAvail].fr_pid    = index;
-  pd_entry = a;
+  frm_tab[frameAvail].fr_pid    = i;
+	int b = TWOTEN + frameAvail;
+  b = b * TWOTEN * 4;
+	proctab[index].pdbr = b;
+  pd_entry = b;
   int indexDos = SETZERO;
-  int sizeIs = sizeof(pt_t);
+  int sizeIs = sizeof(pd_t);
   int limit = (TWOTEN * 4) / sizeIs;
   while (indexDos < limit) {
     /* code */
