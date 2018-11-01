@@ -55,8 +55,8 @@ virt_addr = (virt_addr_t *)&virtualAddress;
   int checkPresVal = pd_entry->pd_pres;
 
   if (checkPresVal == SETZERO){
-    STATWORD ps;
-    disable(ps);
+    STATWORD ps2;
+    disable(ps2);
     int index = SETZERO;
     //kprintf("To be implemented!\n");
     int frameNumber;
@@ -87,7 +87,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
       index = index + 1;
     }
-    restore(ps);
+    restore(ps2);
     newPageTable = frameNumber;
 
     pd_entry->pd_pres   = SETONE;
@@ -144,19 +144,16 @@ virt_addr = (virt_addr_t *)&virtualAddress;
       }
 
   }
-  STATWORD ps;
-  disable(ps);
+  STATWORD ps3;
+  disable(ps3);
   asm("pushl %eax");
   asm("movl pdbr, %eax");                /* mov (move) value at tmp into %eax register.
                                            "l" signifies long (see docs on gas assembler)       */
   asm("movl %eax, %cr3");
   asm("popl %eax");
-  restore(ps);
+  restore(ps3);
 
   restore(ps);
-return OK;
-
-
-
+  return OK;
 
 }
