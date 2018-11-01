@@ -29,10 +29,10 @@ SYSCALL pfint()
   pd_t *pd_entry;
   pt_t *pt_entry;
   pt_t *pageTable;
-
+  unsigned long tempVar,tmp;
 //SEE IF THIS WORKS
 /*  STATWORD ps4;
-  unsigned long tempVar,tmp;
+
   disable(ps4);
   asm("pushl %eax");
   asm("movl %cr2, %eax");
