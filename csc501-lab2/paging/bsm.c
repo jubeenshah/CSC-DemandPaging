@@ -65,13 +65,14 @@ SYSCALL get_bsm(int* avail) {
   int index = SETZERO;
   while (index < 8) { //8 = Number of backing Store
     /* code */
-    if (bsm_tab[index].bs_status == SETZERO) {
+    int checkStatus = bsm_tab[index].bs_status;
+    if ( checkStatus == SETZERO) {
       /* code */
       *avail = index;
       restore(ps);
       return OK;
     }
-    index = index + 1;
+    index = index + SETONE;
   }
   restore(ps);
   return SYSERR;
