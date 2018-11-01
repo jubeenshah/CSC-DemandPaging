@@ -120,7 +120,7 @@ SYSCALL free_frm(int i)
     int p_i_d = frm_tab[index].fr_pid;
     frameID = p_i_d;
 
-    int p_d_b_r = frm_tab[p_i_d].pdbr;
+    int p_d_b_r = proctab[p_i_d].pdbr;
     pdbr = p_d_b_r;
 
     int andVal = TWOTEN - 1;
