@@ -32,7 +32,7 @@ SYSCALL	vfreemem(block, size)
 	disable(ps);
 
 	int list = &proctab[currpid].vmemlist;
-	indexDos = &list;
+	indexDos = list;
 
 	index = indexDos->mnext;
 
@@ -77,5 +77,5 @@ SYSCALL	vfreemem(block, size)
 		}
 
 	restore(ps);
-	return(OK);
+	return OK;
 }
