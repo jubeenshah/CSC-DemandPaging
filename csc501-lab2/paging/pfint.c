@@ -22,7 +22,7 @@ SYSCALL pfint()
   int newPageTable, newFrame, store, pageth;
 
 
-  unsigned long virtualAddress, pdbr, tempVar;
+  unsigned long virtualAddress, pdbr;
   virt_addr_t *virt_addr;
   unsigned int pg, pt, pd;
 
@@ -32,6 +32,7 @@ SYSCALL pfint()
 
 //SEE IF THIS WORKS
   STATWORD ps4;
+  unsigned long tempVar;
   disable(ps4);
   asm("pushl %eax");
   asm("movl %cr2, %eax");
@@ -50,7 +51,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
   int a = sizeof(pd_t);
   int b = pd * a;
-  int add = pdbr + b
+  int add = pdbr + b;
   pd_entry = add;
 
   int checkPresVal = pd_entry->pd_pres;
