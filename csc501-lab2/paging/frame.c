@@ -53,8 +53,8 @@ SYSCALL init_frm(){
  */
 SYSCALL get_frm(int* avail){
 
-  kprintf("%d",page_replace_policy);
-  kprintf("get_frm star!\n");
+  //kprintf("%d",page_replace_policy);
+  //kprintf("get_frm star!\n");
 
   STATWORD ps;
   disable(ps);
@@ -67,7 +67,7 @@ SYSCALL get_frm(int* avail){
   while (index < TWOTEN) {
     /* code */
     int checkStatus = frm_tab[index].fr_status;
-
+    kprintf("Test %d", checkStatus);
     if (checkStatus == SETZERO) {
       *avail = index;
       scA[index] = SETONE;
@@ -76,7 +76,7 @@ SYSCALL get_frm(int* avail){
     }
     index = index + 1;
   }
-  //kprintf(page_replace_policy);
+  kprintf("OUT%d\n",page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
     /* code */
     kprintf();
