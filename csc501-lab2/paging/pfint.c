@@ -32,7 +32,7 @@ SYSCALL pfint()
 
 //SEE IF THIS WORKS
   STATWORD ps4;
-  unsigned long tempVar;
+  unsigned long tempVar,tmp;
   disable(ps4);
   asm("pushl %eax");
   asm("movl %cr2, %eax");
