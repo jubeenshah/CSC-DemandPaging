@@ -9,10 +9,11 @@
 #define	KCODE	1
 #define	KSTACK	2
 #define	KDATA	3
+#define TWOTEN 1024
 
 struct sd gdt_copy[NGD] = {
 		/* 0th entry NULL */
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		/* 1st, Kernel Code Segment */
 	{ 0xffff, 0, 0, 6, 1, 1, 0, 1, 0xf, 0, 0, 1, 1, 0 },
 		/* 2nd, Kernel Data Segment */
@@ -137,7 +138,7 @@ setsegs()
 /*
 	maxaddr = (char *)(npages * NBPG - 1);
 */
-	maxaddr = (char *)( 1536 * NBPG - 1); /* 10M size */
+	maxaddr = (char *)( TWOTEN * NBPG - 1); /* 10M size */
 				 	      /* the top 10M is used for backing store */
 
 	psd = &gdt_copy[1];	/* kernel code segment */
@@ -151,7 +152,7 @@ setsegs()
 
 	psd = &gdt_copy[3];	/* kernel stack segment */
 	psd->sd_lolimit = npages;
-	psd->sd_hilimit = npages >> 16; 
+	psd->sd_hilimit = npages >> 16;
 #endif
 
 	psd = &gdt_copy[4];	/* bootp code segment */
@@ -228,7 +229,7 @@ struct sd	*psd;
 	base = ((int)psd->sd_hibase) << 24;
 	base |= ((int)psd->sd_midbase)<< 16;
 	base |= psd->sd_lobase;
-	
+
 	kprintf("\nby field: base %X limit %d perm %d\n", base, limit,
 		psd->sd_perm);
 	kprintf("iscode %d isapp %d dpl %d present %d avl %d\n",
