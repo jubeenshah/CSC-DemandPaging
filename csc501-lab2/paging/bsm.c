@@ -109,7 +109,8 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
 
   while (index < 8) {
     /* code */
-    if (bsm_tab[index].bs_pid[pid] == SETONE) {
+    int checkPIDBSM = bsm_tab[index].bs_pid[pid];
+    if ( checkPIDBSM == SETONE) {
       /* code */
       *store = index;
       int vpn = bsm_tab[index].bs_vpno[pid];
