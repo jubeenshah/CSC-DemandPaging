@@ -319,7 +319,7 @@ void initializeDemandPaging() {
       baseVal = baseVal * indexDos;
       pt->pt_base = baseVal;
       pt = pt + 1;
-      indexDos = indexDos + SETONE
+      indexDos = indexDos + SETONE;
     }
     index = index + SETONE;
   }
