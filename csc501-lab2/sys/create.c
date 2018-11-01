@@ -100,8 +100,9 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %esi */
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
-	kprintf("creating page dir");
+	//kprintf("creating page dir");
 	createPageDir(pid);
+	kprintf("DONE PID : %d", pid);
 	restore(ps);
 	//kprintf("DONE PID : %d", pid);
 	return(pid);
