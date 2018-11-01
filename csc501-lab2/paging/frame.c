@@ -101,7 +101,7 @@ SYSCALL get_frm(int* avail){
 SYSCALL free_frm(int i)
 {
 
-  //kprintf("To be implemented!\n");
+  kprintf("To be implemented!\n");
   STATWORD ps;
   disable(ps);
   int pageNumber;
