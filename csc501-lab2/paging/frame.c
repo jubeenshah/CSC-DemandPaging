@@ -53,7 +53,7 @@ SYSCALL init_frm(){
  */
 SYSCALL get_frm(int* avail){
 
-  kprintf("To be implemented!\n");
+  kprintf("get_frm star!\n");
   STATWORD ps;
   disable(ps);
 
@@ -83,7 +83,7 @@ SYSCALL get_frm(int* avail){
     restore(ps);
     return OK;
   }
-  //kprintf("To be implemented!\n");
+  kprintf("get frm end!\n");
   restore(ps);
   return SYSERR;
 }
