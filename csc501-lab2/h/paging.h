@@ -1,5 +1,8 @@
 /* paging.h */
 
+#ifndef _PAGING_H_
+#define _PAGING_H_
+
 typedef unsigned int	 bsd_t;
 
 /* Structure for a page directory entry */
@@ -96,7 +99,7 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define AGING 4
 
 #define BACKING_STORE_BASE	0x00800000
-#define BACKING_STORE_UNIT_SIZE 0x00100000
+#define BACKING_STORE_UNIT_SIZE 0x00080000
 
 
 extern int scA[];
