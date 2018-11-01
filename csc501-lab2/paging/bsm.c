@@ -171,15 +171,15 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
     int checkPid = frm_tab[index].fr_pid;
     int checkTyp = frm_tab[index].fr_type;
 
-    if (checkPid == pid) {
-      if (checkTyp == SETZERO) {
+    if (checkPid == pid && checkTyp == SETZERO) {
+    //  if (checkTyp == SETZERO) {
         if (bsm_lookup(pid, virtualAddress, &proctabStore, &pageth) == SYSERR) {
           continue;
         }
         int twotenI = TWOTEN + index;
         int mult = twotenI * twoFourTen;
         write_bs(mult, proctabStore, pageth);
-      }
+    //  }
     }
   }
 
