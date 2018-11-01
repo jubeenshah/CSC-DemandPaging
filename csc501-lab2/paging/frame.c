@@ -53,6 +53,7 @@ SYSCALL init_frm(){
  */
 SYSCALL get_frm(int* avail){
 
+  kprintf("To be implemented!\n");
   STATWORD ps;
   disable(ps);
 
