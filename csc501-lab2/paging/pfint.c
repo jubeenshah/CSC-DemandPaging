@@ -31,15 +31,15 @@ SYSCALL pfint()
   pt_t *pageTable;
 
 //SEE IF THIS WORKS
-  STATWORD ps4;
+/*  STATWORD ps4;
   unsigned long tempVar,tmp;
   disable(ps4);
   asm("pushl %eax");
   asm("movl %cr2, %eax");
   asm("movl %eax, tmp");
-  asm("popl %eax");
-  tempVar = tmp;
-  restore(ps4);
+  asm("popl %eax");*/
+  tempVar = read_cr2();
+  //restore(ps4);
   virtualAddress = tempVar;
 
 
