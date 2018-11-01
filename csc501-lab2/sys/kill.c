@@ -62,8 +62,9 @@ SYSCALL kill(int pid)
 	default:	pptr->pstate = PRFREE;
 	}
 	int persistStoreVal = proctab[pid].store;
-	STATWORD ps;
-	disable(ps);
+	release_bs(persistStoreVal);
+	STATWORD ps2;
+	disable(ps2);
 	int index = SETZERO;
 
 	while (index < TWOTEN) {
@@ -79,9 +80,9 @@ SYSCALL kill(int pid)
 		frm_tab[index].fr_refcnt	= SETZERO;
 		frm_tab[index].fr_type		= SETZERO;
 		frm_tab[index].fr_dirty 	= SETZERO;
-		index = index + 1;
+		index = index + SETONE;
 	}
-	restore(ps);
+	restore(ps2);
 	restore(ps);
 	return(OK);
 }
