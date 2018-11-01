@@ -80,10 +80,11 @@ void initializeDemandPaging() {
   SYSCALL pfintr();
   int index       = SETZERO;
   int indexDos    = SETZERO;
-  int frameNumber = SETZERO;
+
 
   init_bsm();
   init_frm();
+  int frameNumber = SETZERO;
 
   pt_t *pt;
   pd_t *pd;
@@ -113,7 +114,7 @@ void initializeDemandPaging() {
       pt->pt_global = SETONE;
       pt->pt_avail  = SETZERO;
       int baseVal = index * TWOTEN;
-      baseVal = baseVal * indexDos;
+      baseVal = baseVal + indexDos;
       pt->pt_base = baseVal;
       pt = pt + 1;
       indexDos = indexDos + SETONE;
