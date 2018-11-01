@@ -3,6 +3,7 @@
 #include <conf.h>
 #include <kernel.h>
 #include <paging.h>
+#include <proc.h>
 
 #define SETONE  1
 #define SETZERO 0
@@ -30,14 +31,14 @@ SYSCALL pfint()
   pt_t *pageTable;
 
 //SEE IF THIS WORKS
-  STATWORD ps;
-  disable(ps);
+  STATWORD ps4;
+  disable(ps4);
   asm("pushl %eax");
   asm("movl %cr2, %eax");
   asm("movl %eax, tmp");
   asm("popl %eax");
   tempVar = tmp;
-  restore(ps);
+  restore(ps4);
   virtualAddress = tempVar;
 
 
@@ -143,7 +144,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
       }
 
-  
+
   STATWORD ps3;
   disable(ps3);
   asm("pushl %eax");
