@@ -76,7 +76,57 @@ int page_replace_policy = SC;
 /***   not do I/O unless it uses kprintf for polled output.           ***/
 /***								      ***/
 /************************************************************************/
+void initializeDemandPaging() {
+  SYSCALL pfintr();
+  int index       = SETZERO;
+  int indexDos    = SETZERO;
+  int frameNumber = SETZERO;
 
+  init_bsm();
+  init_frm();
+
+  pt_t *pt;
+  pd_t *pd;
+  int limitA = SETONE * 4;
+  while (index < limitA) {
+    /* code */
+    get_frm(&frameNumber);
+    frm_tab[frameNumber].fr_status  = SETONE;
+    frm_tab[frameNumber].fr_type    = SETONE;
+    frm_tab[frameNumber].fr_pid     = SETZERO;
+
+    int a = TWOTEN + frameNumber;
+    a = a * TWOTEN * 4;
+    pt = a;
+
+    while (indexDos < TWOTEN) {
+      /* code */
+
+      pt->pt_pres   = SETONE;
+      pt->pt_write  = SETONE;
+      pt->pt_user   = SETZERO;
+      pt->pt_pwt    = SETZERO;
+      pt->pt_pcd    = SETZERO;
+      pt->pt_acc    = SETZERO;
+      pt->pt_mbz    = SETZERO;
+      pt->pt_dirty  = SETZERO;
+      pt->pt_global = SETONE;
+      pt->pt_avail  = SETZERO;
+      int baseVal = index * TWOTEN;
+      baseVal = baseVal * indexDos;
+      pt->pt_base = baseVal;
+      pt = pt + 1;
+      indexDos = indexDos + SETONE;
+    }
+    index = index + SETONE;
+  }
+  createPageDir(SETZERO);
+  pdbr_init(SETZERO);
+  //int set_evec(unsigned int xnum, u_long handler)
+  int chouda = SETONE * 14;
+  set_evec(chouda, pfintr);
+  enable_paging();
+}
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
  *------------------------------------------------------------------------
@@ -277,56 +327,4 @@ long sizmem()
 		}
 	}
 	return npages;
-}
-
-void initializeDemandPaging() {
-  SYSCALL pfintr();
-  int index       = SETZERO;
-  int indexDos    = SETZERO;
-  int frameNumber = SETZERO;
-
-  init_bsm();
-  init_frm();
-
-  pt_t *pt;
-  pd_t *pd;
-  int limitA = SETONE * 4;
-  while (index < limitA) {
-    /* code */
-    get_frm(&frameNumber);
-    frm_tab[frameNumber].fr_status  = SETONE;
-    frm_tab[frameNumber].fr_type    = SETONE;
-    frm_tab[frameNumber].fr_pid     = SETZERO;
-
-    int a = TWOTEN + frameNumber;
-    a = a * TWOTEN * 4;
-    pt = a;
-
-    while (indexDos < TWOTEN) {
-      /* code */
-
-      pt->pt_pres   = SETONE;
-      pt->pt_write  = SETONE;
-      pt->pt_user   = SETZERO;
-      pt->pt_pwt    = SETZERO;
-      pt->pt_pcd    = SETZERO;
-      pt->pt_acc    = SETZERO;
-      pt->pt_mbz    = SETZERO;
-      pt->pt_dirty  = SETZERO;
-      pt->pt_global = SETONE;
-      pt->pt_avail  = SETZERO;
-      int baseVal = index * TWOTEN;
-      baseVal = baseVal * indexDos;
-      pt->pt_base = baseVal;
-      pt = pt + 1;
-      indexDos = indexDos + SETONE;
-    }
-    index = index + SETONE;
-  }
-  createPageDir(SETZERO);
-  pdbr_init(SETZERO);
-  //int set_evec(unsigned int xnum, u_long handler)
-  int chouda = SETONE * 14;
-  set_evec(chouda, pfintr);
-  enable_paging();
 }
