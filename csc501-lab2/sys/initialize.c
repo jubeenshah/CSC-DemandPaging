@@ -345,6 +345,7 @@ scA// /* initialize.c - nulluser, sizmem, sysinit */
 // 	}
 // 	return npages;
 // }
+
 /* initialize.c - nulluser, sizmem, sysinit */
 
 #include <conf.h>
