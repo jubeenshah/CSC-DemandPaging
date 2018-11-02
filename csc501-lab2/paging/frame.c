@@ -39,8 +39,8 @@ SYSCALL init_frm(){
     frm_tab[index].fr_type    = SETZERO;
     frm_tab[index].fr_dirty   = SETZERO;
 
-    scA[index]  = SETZERO;
-    scPointer   = SETZERO;
+    sc_acc[index]  = SETZERO;
+    sc_ptr   = SETZERO;
     index = index + SETONE;
   }
   restore(ps);
@@ -71,7 +71,7 @@ SYSCALL get_frm(int* avail){
     if (checkStatus == SETZERO) {
       //kprintf("IN");
       *avail = index;
-      scA[index] = SETONE;
+      sc_acc[index] = SETONE;
       restore(ps);
       return OK;
     }
@@ -84,7 +84,7 @@ SYSCALL get_frm(int* avail){
     //kprintf("replacement policy = SC");
     frameNumber = getFrameSC();
     free_frm(frameNumber);
-    scA[frameNumber] = SETONE;
+    sc_acc[frameNumber] = SETONE;
     *avail = frameNumber;
     restore(ps);
     return OK;
@@ -189,10 +189,10 @@ int getFrameSC() {
     index = index % TWOTEN;
     int checkType = frm_tab[index].fr_type;
     if (checkType == SETZERO) {
-      int checkSCValue = scA[index];
+      int checkSCValue = sc_acc[index];
       if (checkSCValue == SETONE) {
         int updateSCVAL = SETZERO;
-        scA[index] = updateSCVAL;
+        sc_acc[index] = updateSCVAL;
       } else {
         scPointer = index + SETONE;
         restore (ps);
