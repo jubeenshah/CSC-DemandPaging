@@ -178,8 +178,8 @@ extern fr_map_t frm_tab[];
 
 /* modified */
 extern int lfu_cnt[];
-extern int scA[];
-extern int scPointer;
+extern int sc_acc[];
+extern int sc_ptr;
 /* Prototypes for required API calls */
 SYSCALL xmmap(int, bsd_t, int);
 SYSCALL xunmap(int);
