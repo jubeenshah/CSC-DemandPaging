@@ -44,7 +44,7 @@ int create_page_tab(){
 SYSCALL pfint()
 {
  // kprintf("To be implemented!\n");
- 	pfint_cnt++;
+ 	counter++;
 	//kprintf("pfint %d\n",pfint_cnt);
  	STATWORD ps;
 	disable(ps);
