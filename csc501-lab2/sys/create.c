@@ -141,11 +141,10 @@ void createPageDir(int i) {
   proctab[index].pdbr = a;
   frm_tab[frameAvail].fr_status = SETONE;
   frm_tab[frameAvail].fr_type   = SETONE * 2;
-  frm_tab[frameAvail].fr_pid    = i;
-	int b = TWOTEN + frameAvail;
-  b = b * TWOTEN * 4;
-	proctab[index].pdbr = b;
-  pd_entry = b;
+  frm_tab[frameAvail].fr_pid    = index;
+	// int b = TWOTEN + frameAvail;
+  // b = b * TWOTEN * 4;
+  pd_entry =   proctab[index].pdbr ;
   int indexDos = SETZERO;
   int sizeIs = sizeof(pd_t);
   int limit = (TWOTEN * 4) / sizeIs;

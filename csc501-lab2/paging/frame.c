@@ -133,7 +133,7 @@ SYSCALL free_frm(int i)
     pageTable = virtualAddress & andVal;
 
     int shiftVal = SETONE * 10;
-    pageDirectory = virtualAddress >> shiftVal;
+    pageDirectory = virtualAddress>>shiftVal;
 
     int proctabStore = proctab[frameID].store;
     storeID = proctabStore;
