@@ -34,7 +34,7 @@ SYSCALL init_bsm(){
     bsm_tab[index].bs_npages  = SETZERO;
     bsm_tab[index].bs_sem     = SETZERO;
     bsm_tab[index].bs_private = SETZERO;
-    bsm_tab[index].bs_mapn = SETZERO;
+    bsm_tab[index].bs_mapping = SETZERO;
     index = index + SETONE;
   }
   restore(ps);
@@ -123,7 +123,7 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   bsm_tab[source].bs_pid[pid] = SETONE;
   bsm_tab[source].bs_sem      = SETZERO;
   bsm_tab[source].bs_vpno[pid]= vpno;
-  bsm_tab[source].bs_mapn++;
+  bsm_tab[source].bs_mapping++;
   proctab[currpid].vhpno = vpno;
   proctab[currpid].store = source;
 
@@ -146,7 +146,7 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
   int twoFourTen = TWOTEN * 4;
   int pageth;
   unsigned long virtualAddress = vpno * twoFourTen;
-  bsm_tab[proctabStore].bs_mapn--;
+  bsm_tab[proctabStore].bs_mapping--;
 
   while (index < TWOTEN) {
     /* code */
@@ -198,7 +198,7 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
 // 		//bsm_tab[i].bs_vpno=4096;
 // 		bsm_tab[i].bs_npages=0;
 // 		bsm_tab[i].bs_sem=0;
-// 		bsm_tab[i].bs_mapn=0;
+// 		bsm_tab[i].bs_mapping=0;
 // 		bsm_tab[i].bs_private=0;
 // 	}
 //
@@ -285,8 +285,8 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
 // 	bsm_tab[source].bs_pid[pid]=1;
 // 	bsm_tab[source].bs_sem=0;
 // 	bsm_tab[source].bs_vpno[pid]=vpno;
-// 	bsm_tab[source].bs_mapn++;
-// 	//kprintf("bsm_map pid:%d store:%d mapn:%d\n",pid,source,bsm_tab[source].bs_mapn);
+// 	bsm_tab[source].bs_mapping++;
+// 	//kprintf("bsm_map pid:%d store:%d mapn:%d\n",pid,source,bsm_tab[source].bs_mapping);
 //
 // 	proctab[currpid].vhpno=vpno;
 // 	proctab[currpid].store=source;
@@ -311,9 +311,9 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
 // 	int pageth;
 // 	unsigned long vaddr=vpno*NBPG;
 //
-// 	bsm_tab[store].bs_mapn--;
-// 	//kprintf("bsm_tab[%d].bs_mapn:%d\n",store,bsm_tab[store].bs_mapn);
-// //	kprintf("\nbsm_unmap pid:%d store:%d mapn:%d vaddr:%08x npages: %d\n",pid,store,bsm_tab[store].bs_mapn,vaddr,bsm_tab[store].bs_npages);
+// 	bsm_tab[store].bs_mapping--;
+// 	//kprintf("bsm_tab[%d].bs_mapping:%d\n",store,bsm_tab[store].bs_mapping);
+// //	kprintf("\nbsm_unmap pid:%d store:%d mapn:%d vaddr:%08x npages: %d\n",pid,store,bsm_tab[store].bs_mapping,vaddr,bsm_tab[store].bs_npages);
 // 	for(;i<NFRAMES;++i){
 // 		if(frm_tab[i].fr_pid==pid && frm_tab[i].fr_type==FR_PAGE){
 // 			int res_lookup=bsm_lookup(pid,vaddr,&store,&pageth);
