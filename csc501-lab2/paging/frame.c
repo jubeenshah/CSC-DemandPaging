@@ -206,7 +206,7 @@ int getFrameSC() {
   return SYSERR;
 }
 
-void frameDefine(int pid) {
+void out_frm(int pid) {
 STATWORD ps;
 disable(ps);
 int index = SETZERO;
