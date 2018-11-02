@@ -18,7 +18,7 @@ SYSCALL	vfreemem(block, size)
 	struct	mblock	*block;
 	unsigned size;
 {
-	kprintf("VFREEMEM To be implemented!\n");
+	//kprintf("VFREEMEM To be implemented!\n");
 	STATWORD ps;
 	struct mblock *index;
 	unsigned top;
