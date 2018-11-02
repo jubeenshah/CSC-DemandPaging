@@ -18,7 +18,6 @@ SYSCALL init_bsm(){
 //kprintf("INIT BSM");
   STATWORD ps;
   disable(ps);
-
   int index = SETZERO;
   int indexDos;
   int twoFourTen = TWOTEN * 4;
@@ -26,17 +25,6 @@ SYSCALL init_bsm(){
     /* code */
     bsm_tab[index].bs_status = SETZERO;
     indexDos = SETZERO;
-    /*
-    typedef struct{
-      int bs_status;			/* MAPPED or UNMAPPED		*
-      int bs_pid[NPROC];				/* process id using this slot   *
-      int bs_vpno[NPROC];				/* starting virtual page number *
-      int bs_npages;			/* number of pages in the store *
-      int bs_sem;				/* semaphore mechanism ?	*
-      int bs_private;
-      int bs_mapping;
-    } bs_map_t;
-    */
     while (indexDos < NPROC) {
       /* code */
       bsm_tab[index].bs_pid[indexDos] = SETZERO;
@@ -47,10 +35,8 @@ SYSCALL init_bsm(){
     bsm_tab[index].bs_sem     = SETZERO;
     bsm_tab[index].bs_private = SETZERO;
     bsm_tab[index].bs_mapping = SETZERO;
-
     index = index + SETONE;
   }
-
   restore(ps);
   return OK;
 }
@@ -85,12 +71,9 @@ SYSCALL get_bsm(int* avail) {
  *-------------------------------------------------------------------------
  */
 SYSCALL free_bsm(int i){
-
   STATWORD ps;
 	disable(ps);
-
 	bsm_tab[i].bs_status=SETZERO;
-
 	restore(ps);
 	return OK;
 }
@@ -106,8 +89,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
   //kprintf("bsm_lookup");
   int index = SETZERO;
   int starth = vaddr & ANDVAL;
-  int startp = starth >> 12;
-
+  int startp = (starth)>>12;
   while (index < BS) {
     /* code */
     int checkPIDBSM = bsm_tab[index].bs_pid[pid];
@@ -118,9 +100,8 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
       *pageth = startp - vpn;
       restore(ps);
       return OK;
-
     }
-    index = index + 1;
+    index = index + SETONE;
   }
   restore(ps);
   return SYSERR;
