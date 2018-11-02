@@ -99,7 +99,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*pushsp = pptr->pesp = (unsigned long)saddr;
 
 	/* modified */
-	create_page_dir(pid);
+	createPageDir(pid);
 	restore(ps);
 	return(pid);
 }
@@ -123,7 +123,7 @@ LOCAL int newpid()
 }
 
 
-void create_page_dir(int pid){
+void createPageDir(int pid){
 	int avail_frame=0;
 	pd_t *pd_entry;
 	get_frm(&avail_frame);
