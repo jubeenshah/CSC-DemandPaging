@@ -127,39 +127,57 @@ LOCAL int newpid()
 }
 
 void createPageDir(int i) {
-  int index = i;
-
-  int frameAvail = SETZERO;
-  pd_t *pd_entry;
-	//kprintf("Just before");
-  get_frm(&frameAvail);
-	//kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
+  int pid = i;
 	//
-  int a = TWOTEN + frameAvail;
-  a = a * TWOTEN * 4;
+  // int frameAvail = SETZERO;
+  // pd_t *pd_entry;
+	// //kprintf("Just before");
+  // get_frm(&frameAvail);
+	// //kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
+	// //
+  // int a = (TWOTEN + frameAvail) * TWOTEN * 4;
+  // proctab[index].pdbr = a;
+  // frm_tab[frameAvail].fr_status = SETONE;
+  // frm_tab[frameAvail].fr_type   = SETONE * 2;
+  // frm_tab[frameAvail].fr_pid    = index;
+	// // int b = TWOTEN + frameAvail;
+  // // b = b * TWOTEN * 4;
+  // pd_entry =   proctab[index].pdbr ;
+  // int indexDos = SETZERO;
+  // int sizeIs = sizeof(pd_t);
+  // int limit = (TWOTEN * 4) / sizeIs;
+  // while (indexDos < limit) {
+  //   /* code */
+	// 	//kprintf("%d", indexDos);
+  //   pd_entry[indexDos].pd_write = SETONE;
+  //   int limitDos = SETONE * 4;
+  //   if (indexDos < limitDos) {
+  //     /* code */
+  //     int addIs = TWOTEN + indexDos;
+  //     pd_entry[indexDos].pd_base = addIs;
+  //     pd_entry[indexDos].pd_pres = SETONE;
+  //   }
+  //   indexDos = indexDos + SETONE;
+  // }
 
-  proctab[index].pdbr = a;
-  frm_tab[frameAvail].fr_status = SETONE;
-  frm_tab[frameAvail].fr_type   = SETONE * 2;
-  frm_tab[frameAvail].fr_pid    = index;
-	// int b = TWOTEN + frameAvail;
-  // b = b * TWOTEN * 4;
-  pd_entry =   proctab[index].pdbr ;
-  int indexDos = SETZERO;
-  int sizeIs = sizeof(pd_t);
-  int limit = (TWOTEN * 4) / sizeIs;
-  while (indexDos < limit) {
-    /* code */
-		//kprintf("%d", indexDos);
-    pd_entry[indexDos].pd_write = SETONE;
-    int limitDos = SETONE * 4;
-    if (indexDos < limitDos) {
-      /* code */
-      int addIs = TWOTEN + indexDos;
-      pd_entry[indexDos].pd_base = addIs;
-      pd_entry[indexDos].pd_pres = SETONE;
-    }
-    indexDos = indexDos + SETONE;
-  }
+int avail_frame=0;
+pd_t *pd_entry;
+get_frm(&avail_frame);
+
+//	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
+
+proctab[pid].pdbr=(FRAME0+ avail_frame)*NBPG;
+frm_tab[avail_frame].fr_status=FRM_MAPPED;
+frm_tab[avail_frame].fr_type=FR_DIR;
+frm_tab[avail_frame].fr_pid=pid;
+pd_entry= proctab[pid].pdbr;
+int i=0;
+for(;i<NBPG/sizeof(pd_t);++i){/*supposed 4096/4 = 1024 */
+	pd_entry[i].pd_write=1;
+	if(i<4){
+		pd_entry[i].pd_base=FRAME0+i;
+		pd_entry[i].pd_pres=1;
+	}
+}
 
 }
