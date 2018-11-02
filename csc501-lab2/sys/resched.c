@@ -86,16 +86,16 @@ int	resched()
 	PrintSaved(nptr);
 #endif
 
-	// int a = optr;
-	// int b = proctab;
-	// int oldProcessID = a - b;
-	// int old_pid = oldProcessID;
+	int a = optr;
+	int b = proctab;
+	int oldProcessID = a - b;
+	int old_pid = oldProcessID;
 	// int store;
 	// int pageth;
 	// int hasToLookup;
 	// int res_lookup = hasToLookup;
 
-	int old_pid=optr-proctab;
+	//int old_pid=optr-proctab;
 	int store,pageth,res_lookup;
 
 
