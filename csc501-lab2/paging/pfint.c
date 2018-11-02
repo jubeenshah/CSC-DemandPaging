@@ -110,12 +110,7 @@ SYSCALL pfint()
 
 		read_bs((char *)((FRAME0 + frm_new)*NBPG),store,pageth);
 
-		if(page_replace_policy==SC){
 
-		}
-		else if(page_replace_policy==LFU){
-
-		}
 	}
 	write_cr3(pdbr);
 	restore(ps);
