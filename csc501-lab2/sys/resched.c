@@ -307,88 +307,145 @@
 // }
 // #endif
 
-/* vcreate.c - vcreate */
+/* resched.c  -  resched */
 
 #include <conf.h>
-#include <i386.h>
 #include <kernel.h>
 #include <proc.h>
-#include <sem.h>
-#include <mem.h>
-#include <io.h>
+#include <q.h>
 #include <paging.h>
 
-/*
-static unsigned long esp;
-*/
+unsigned long currSP;	/* REAL sp of current process */
 
-LOCAL	newpid();
 /*------------------------------------------------------------------------
- *  create  -  create a process to start running a procedure
+ * resched  --  reschedule processor to highest priority ready process
+ *
+ * Notes:	Upon entry, currpid gives current process id.
+ *		Proctab[currpid].pstate gives correct NEXT state for
+ *			current process if other than PRREADY.
  *------------------------------------------------------------------------
  */
-SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
-	int	*procaddr;		/* procedure address		*/
-	int	ssize;			/* stack size in words		*/
-	int	hsize;			/* virtual heap size in pages	*/
-	int	priority;		/* process priority > 0		*/
-	char	*name;			/* name (for debugging)		*/
-	int	nargs;			/* number of args that follow	*/
-	long	args;			/* arguments (treated like an	*/
-					/* array in the code)		*/
+int	resched()
 {
-	//kprintf("To be implemented!\n");
-	STATWORD ps;
-	disable(ps);
+	STATWORD		PS;
+	register struct	pentry	*optr;	/* pointer to old process entry */
+	register struct	pentry	*nptr;	/* pointer to new process entry */
+	register int i;
 
-	int pid=create(procaddr,ssize,priority,name,nargs,args);
+	disable(PS);
+	/* no switch needed if current process priority higher than next*/
 
-	int store;
-	if(get_bsm(&store)==SYSERR){
-		restore(ps);
-		return SYSERR;
+	if ( ( (optr= &proctab[currpid])->pstate == PRCURR) &&
+	   (lastkey(rdytail)<optr->pprio)) {
+		restore(PS);
+		return(OK);
+	}
+
+#ifdef STKCHK
+	/* make sure current stack has room for ctsw */
+	asm("movl	%esp, currSP");
+	if (currSP - optr->plimit < 48) {
+		kprintf("Bad SP current process, pid=%d (%s), lim=0x%lx, currently 0x%lx\n",
+			currpid, optr->pname,
+			(unsigned long) optr->plimit,
+			(unsigned long) currSP);
+		panic("current process stack overflow");
+	}
+#endif
+
+	/* force context switch */
+
+	if (optr->pstate == PRCURR) {
+		optr->pstate = PRREADY;
+		insert(currpid,rdyhead,optr->pprio);
+	}
+
+	/* remove highest priority process at end of ready list */
+
+	nptr = &proctab[ (currpid = getlast(rdytail)) ];
+	nptr->pstate = PRCURR;		/* mark it currently running	*/
+#ifdef notdef
+#ifdef	STKCHK
+	if ( *( (int *)nptr->pbase  ) != MAGIC ) {
+		kprintf("Bad magic pid=%d value=0x%lx, at 0x%lx\n",
+			currpid,
+			(unsigned long) *( (int *)nptr->pbase ),
+			(unsigned long) nptr->pbase);
+		panic("stack corrupted");
 	}
 	/*
-	bsm_tab[store].bs_npages=hsize;
-	bsm_tab[store].bs_pid=pid;
-	bsm_tab[store].bs_status=BSM_MAPPED;
-	bsm_tab[store].bs_vpno=4096;
-	bsm_tab[store].bs_sem=0;
-
-	proctab[pid].store=store;
-	proctab[pid].vhpon=4096;
-*/
-	bsm_map(pid,4096,store,hsize);
-	bsm_tab[store].bs_private=1;
-
-	proctab[pid].vhpnpages=hsize;
-	proctab[pid].vmemlist=getmem(sizeof(struct mblock *));
-	proctab[pid].vmemlist->mnext=(struct mblock *)(4096*NBPG);
-	proctab[pid].vmemlist->mlen=0;
-
-	struct mblock *baseblock;
-	baseblock=BACKING_STORE_BASE + (store*BACKING_STORE_UNIT_SIZE);
-	baseblock->mlen=NBPG*hsize;
-	baseblock->mnext=NULL;
-
-	restore(ps);
-	return pid;
-}
-
-/*------------------------------------------------------------------------
- * newpid  --  obtain a new (free) process id
- *------------------------------------------------------------------------
- */
-LOCAL	newpid()
-{
-	int	pid;			/* process id to return		*/
-	int	i;
-
-	for (i=0 ; i<NPROC ; i++) {	/* check all NPROC slots	*/
-		if ( (pid=nextproc--) <= 0)
-			nextproc = NPROC-1;
-		if (proctab[pid].pstate == PRFREE)
-			return(pid);
+	 * need ~16 longs of stack space below, so include that in check
+	 *	below.
+	 */
+	if (nptr->pesp - nptr->plimit < 48) {
+		kprintf("Bad SP pid=%d (%s), lim=0x%lx will be 0x%lx\n",
+			currpid, nptr->pname,
+			(unsigned long) nptr->plimit,
+			(unsigned long) nptr->pesp);
+		panic("stack overflow");
 	}
-	return(SYSERR);
+#endif	/* STKCHK */
+#endif	/* notdef */
+#ifdef	RTCLOCK
+	preempt = QUANTUM;		/* reset preemption counter	*/
+#endif
+#ifdef	DEBUG
+	PrintSaved(nptr);
+#endif
+	int old_pid=optr-proctab;
+	int store,pageth,res_lookup;
+	for(i=0;i<NFRAMES;++i){
+		if(frm_tab[i].fr_pid==old_pid && frm_tab[i].fr_type==FR_PAGE ){
+			res_lookup=bsm_lookup(old_pid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
+			if(res_lookup==SYSERR){
+				continue;
+			}
+		//	kprintf("write_bs pid:%d vaddr:%08x store:%d pageth:%d\n",pid,vaddr,store,pageth);
+			write_bs((i+FRAME0)*NBPG,store,pageth);
+		}
+
+	}
+	for(i=0;i<NFRAMES;++i){
+		 if(frm_tab[i].fr_pid==currpid && frm_tab[i].fr_type==FR_PAGE){
+			res_lookup=bsm_lookup(currpid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
+			if(res_lookup==SYSERR){
+				continue;
+			}
+			read_bs((i+FRAME0)*NBPG,store,pageth);
+		}
+
+	}
+	set_pdbr(currpid);
+
+	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
+
+#ifdef	DEBUG
+	PrintSaved(nptr);
+#endif
+
+	/* The OLD process returns here when resumed. */
+	restore(PS);
+	return OK;
 }
+
+
+
+#ifdef DEBUG
+/* passed the pointer to the regs in the process entry */
+PrintSaved(ptr)
+    struct pentry *ptr;
+{
+    unsigned int i;
+
+    if (ptr->pname[0] != 'm') return;
+
+    kprintf("\nSaved context listing for process '%s'\n",ptr->pname);
+    for (i=0; i<8; ++i) {
+	kprintf("     D%d: 0x%08lx	",i,(unsigned long) ptr->pregs[i]);
+	kprintf("A%d: 0x%08lx\n",i,(unsigned long) ptr->pregs[i+8]);
+    }
+    kprintf("         PC: 0x%lx",(unsigned long) ptr->pregs[PC]);
+    kprintf("  SP: 0x%lx",(unsigned long) ptr->pregs[SSP]);
+    kprintf("  PS: 0x%lx\n",(unsigned long) ptr->pregs[PS]);
+}
+#endif
