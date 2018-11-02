@@ -24,14 +24,13 @@ SYSCALL pfint()
   int newPageTable, newFrame, store, pageth;
 
 
-  unsigned long virtualAddress, pdbr;
+  unsigned long virtualAddress, pdbr,tempVar,tmp;
   virt_addr_t *virt_addr;
   unsigned int pg, pt, pd;
 
   pd_t *pd_entry;
   pt_t *pt_entry;
   pt_t *pageTable;
-  unsigned long tempVar,tmp;
 //SEE IF THIS WORKS
 /*  STATWORD ps4;
 
@@ -60,7 +59,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
   if (checkPresVal == SETZERO){
 
-    newPageTable = pageCreate();
+
 
     pd_entry->pd_pres   = SETONE;
     pd_entry->pd_write  = SETONE;
@@ -72,6 +71,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
     pd_entry->pd_fmb    = SETZERO;
     pd_entry->pd_global = SETZERO;
     pd_entry->pd_avail  = SETZERO;
+    newPageTable = pageCreate();
     int base = TWOTEN + newPageTable;
     pd_entry->pd_base = base;
 
@@ -83,9 +83,9 @@ virt_addr = (virt_addr_t *)&virtualAddress;
     int q = sizeof(pt_t);
     int multTwo = pt * q;
     int twoFourTenTwo = TWOTEN * 4;
-    int w = pd_entry->pd_base;
-    int multThree = w * twoFourTenTwo;
-    int addTwoTwo =  multTwo + multThree;
+    int w = pd_entry->pd_base * twoFourTenTwo;
+    //int multThree = w * twoFourTenTwo;
+    int addTwoTwo =  multTwo + w;
     pt_entry = (pt_t *)(addTwoTwo);
 
     int checkPDPresVal = pt_entry->pt_pres;
@@ -105,12 +105,12 @@ virt_addr = (virt_addr_t *)&virtualAddress;
       frm_tab[newFrame].fr_status = SETONE;
       frm_tab[newFrame].fr_type   = SETZERO;
       frm_tab[newFrame].fr_pid    = currpid;
-      int divi = virtualAddress / twoFourTenTwo;
-      frm_tab[newFrame].fr_vpno   = divi;
+      //int divi = virtualAddress/twoFourTenTwo;
+      frm_tab[newFrame].fr_vpno   = virtualAddress/4096;
 
       bsm_lookup(currpid, virtualAddress, &store, &pageth);
-      int passVal = TWOTEN + newFrame;
-      passVal = passVal * twoFourTenTwo;
+      int passVal = (TWOTEN + newFrame) * 4096;
+      //passVal = passVal * twoFourTenTwo;
       read_bs((char *)(passVal), store, pageth);
 
       }
