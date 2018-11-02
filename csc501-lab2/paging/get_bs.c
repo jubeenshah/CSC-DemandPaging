@@ -12,7 +12,7 @@ int get_bs(bsd_t bs_id, unsigned int npages) {
 STATWORD ps;
 disable(ps);
   /* requests a new mapping of npages with ID map_id */
-    kprintf("get_bs\n");
+    //kprintf("get_bs\n");
     int checkSemValue     = bsm_tab[bs_id].bs_sem;
     int checkPrivateValue = bsm_tab[bs_id].bs_private;
     int checkStatus       = bsm_tab[bs_id].bs_status;
