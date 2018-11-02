@@ -256,7 +256,7 @@ SYSCALL init_frm()
 
 		lfu_cnt[i]=0; /* LFU counter*/
 		sc_acc[i]=0;/* SC policy */
-		sc_ptr=0;
+		scPointer=0;
 	}
 	restore(ps);
 	return OK;
@@ -393,7 +393,7 @@ int get_frm_SC(){
 	STATWORD ps;
 	disable(ps);
 
-	int i=sc_ptr;
+	int i=scPointer;
 	while(1){
 		i=i%NFRAMES;
 		if(frm_tab[i].fr_type==FR_PAGE){
@@ -401,7 +401,7 @@ int get_frm_SC(){
 				sc_acc[i]=0;
 			}
 			else{
-				sc_ptr=i+1;
+				scPointer=i+1;
 //				kprintf("get frm %d ------SC \n",i);
 				restore(ps);
 				return i;
