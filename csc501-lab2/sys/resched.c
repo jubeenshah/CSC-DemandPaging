@@ -90,8 +90,10 @@ int	resched()
 	int hasToLookup;
 	int old_pid;
 	int oldProcessID;
+	int index;
+
 	oldProcessID = optr - proctab;
-	int index = SETZERO;
+	index = SETZERO;
 	old_pid = oldProcessID;
 	while (index < TWOTEN) {
 		/* code */
