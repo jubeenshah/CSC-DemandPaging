@@ -11,7 +11,7 @@
 
 LOCAL int newpid();
 
-void create_page_dir(int pid);
+void createPageDir(int pid);
 
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
