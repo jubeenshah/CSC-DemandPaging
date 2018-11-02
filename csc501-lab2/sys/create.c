@@ -11,11 +11,8 @@
 
 LOCAL int newpid();
 
-#define SETONE  1
-#define SETZERO 0
-#define TWOTEN  1024
+void create_page_dir(int pid);
 
-void createPageDir(int i);
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
  *------------------------------------------------------------------------
@@ -100,11 +97,10 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %esi */
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
-	//kprintf("creating page dir");
-	createPageDir(pid);
-	//kprintf("DONE PID : %d", pid);
+
+	/* modified */
+	create_page_dir(pid);
 	restore(ps);
-	//kprintf("DONE PID : %d", pid);
 	return(pid);
 }
 
@@ -126,40 +122,27 @@ LOCAL int newpid()
 	return(SYSERR);
 }
 
-void createPageDir(int i) {
-  int index = i;
 
-  int frameAvail = SETZERO;
-  pd_t *pd_entry;
-	//kprintf("Just before");
-  get_frm(&frameAvail);
-	//kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
-	//
-  int a = TWOTEN + frameAvail;
-  a = a * TWOTEN * 4;
+void create_page_dir(int pid){
+	int avail_frame=0;
+	pd_t *pd_entry;
+	get_frm(&avail_frame);
 
-  proctab[index].pdbr = a;
-  frm_tab[frameAvail].fr_status = SETONE;
-  frm_tab[frameAvail].fr_type   = SETONE * 2;
-  frm_tab[frameAvail].fr_pid    = index;
-	// int b = TWOTEN + frameAvail;
-  // b = b * TWOTEN * 4;
-  pd_entry =   proctab[index].pdbr ;
-  int indexDos = SETZERO;
-  int sizeIs = sizeof(pd_t);
-  int limit = (TWOTEN * 4) / sizeIs;
-  while (indexDos < limit) {
-    /* code */
-		//kprintf("%d", indexDos);
-    pd_entry[indexDos].pd_write = SETONE;
-    int limitDos = SETONE * 4;
-    if (indexDos < limitDos) {
-      /* code */
-      int addIs = TWOTEN + indexDos;
-      pd_entry[indexDos].pd_base = addIs;
-      pd_entry[indexDos].pd_pres = SETONE;
-    }
-    indexDos = indexDos + SETONE;
-  }
+//	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
+
+	proctab[pid].pdbr=(FRAME0+ avail_frame)*NBPG;
+	frm_tab[avail_frame].fr_status=FRM_MAPPED;
+	frm_tab[avail_frame].fr_type=FR_DIR;
+	frm_tab[avail_frame].fr_pid=pid;
+	pd_entry= proctab[pid].pdbr;
+	int i=0;
+	for(;i<NBPG/sizeof(pd_t);++i){/*supposed 4096/4 = 1024 */
+		pd_entry[i].pd_write=1;
+		if(i<4){
+			pd_entry[i].pd_base=FRAME0+i;
+			pd_entry[i].pd_pres=1;
+		}
+	}
+
 
 }
