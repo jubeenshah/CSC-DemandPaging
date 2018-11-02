@@ -42,7 +42,7 @@ int pageCreate() {
     pageTable[index].pt_avail = SETZERO;
     pageTable[index].pt_base  = SETZERO;
 
-    index = index + 1;
+    index = index + SETONE;
   }
   restore(ps);
   return frameNumber;
@@ -53,7 +53,7 @@ int pageCreate() {
  */
 SYSCALL pfint()
 {
-  pfint_cnt = pfint_cnt + 1;
+  pfint_cnt = pfint_cnt + SETONE;
 
   STATWORD ps;
   disable(ps);
