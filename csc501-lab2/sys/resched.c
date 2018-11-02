@@ -24,7 +24,13 @@ int	resched()
 	register struct	pentry	*optr;	/* pointer to old process entry */
 	register struct	pentry	*nptr;	/* pointer to new process entry */
 	register int i;
-
+	int store;
+	int pageth;
+	int hasToLookup;
+	int old_pid;
+	int oldProcessID;
+	int index;
+	
 	disable(PS);
 	/* no switch needed if current process priority higher than next*/
 
@@ -85,16 +91,12 @@ int	resched()
 #ifdef	DEBUG
 	PrintSaved(nptr);
 #endif
-	int store;
-	int pageth;
-	int hasToLookup;
-	int old_pid;
-	int oldProcessID;
-	int index;
+
 
 	oldProcessID = optr - proctab;
 	index = SETZERO;
 	old_pid = oldProcessID;
+
 	while (index < TWOTEN) {
 		/* code */
 		int checkPid = frm_tab[index].fr_pid;
