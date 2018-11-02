@@ -161,7 +161,7 @@ typedef struct{
   int bs_sem;				/* semaphore mechanism ?	*/
 
   int bs_private;           /* private heap use? */
-  int bs_mapping;              /* n process map into this backing store */
+  int bs_mapn;              /* n process map into this backing store */
 } bs_map_t;
 
 typedef struct{
@@ -178,8 +178,8 @@ extern fr_map_t frm_tab[];
 
 /* modified */
 extern int lfu_cnt[];
-extern int scA[];
-extern int scPointer;
+extern int sc_acc[];
+extern int sc_ptr;
 /* Prototypes for required API calls */
 SYSCALL xmmap(int, bsd_t, int);
 SYSCALL xunmap(int);
@@ -195,8 +195,8 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define FRAME0		1024	/* zero-th frame		*/
 #define NFRAMES 	1024	/* number of frames		*/
 /*modified*/
-#define NBS 8 /* number of backing store */
-#define NPPBS 256 /* number of pages per backing store */
+#define NBS 16 /* number of backing store */
+#define NPPBS 128 /* number of pages per backing store */
 
 
 
