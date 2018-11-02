@@ -88,7 +88,7 @@ int	resched()
 	int store;
 	int pageth;
 	int hasToLookup;
-	int old_pid
+	int old_pid;
 	int oldProcessID;
 	oldProcessID = optr - proctab;
 	int index = SETZERO;
