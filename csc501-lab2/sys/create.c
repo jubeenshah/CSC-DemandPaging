@@ -126,8 +126,7 @@ LOCAL int newpid()
 	return(SYSERR);
 }
 
-void createPageDir(int i) {
-  int pid = i;
+void createPageDir(int pid) {
 	//
   // int frameAvail = SETZERO;
   // pd_t *pd_entry;
