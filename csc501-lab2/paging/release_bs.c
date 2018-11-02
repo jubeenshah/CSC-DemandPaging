@@ -6,6 +6,7 @@
 #define SETONE  1
 #define SETZERO 0
 #define TWOTEN  1024
+#define TWOTWE  4096
 
 SYSCALL release_bs(bsd_t bs_id) {
 
@@ -15,7 +16,7 @@ SYSCALL release_bs(bsd_t bs_id) {
     disable(ps);
     int index = bs_id;
     bsm_tab[index].bs_pid[currpid]  = SETZERO;
-    bsm_tab[index].bs_vpno[currpid] = TWOTEN * 4;
+    bsm_tab[index].bs_vpno[currpid] = TWOTWE;
 
     int checkMapping = bsm_tab[index].bs_mapping;
     if (checkMapping == SETZERO) {
