@@ -121,7 +121,7 @@ void initializeDemandPaging() {
     }
     index = index + SETONE;
   }
-  create_page_dir(NULLPROC); //Changed
+  create_page_dir(NULLPROC);
   set_pdbr(NULLPROC);
   //int set_evec(unsigned int xnum, u_long handler)
   // int chouda = 14;
