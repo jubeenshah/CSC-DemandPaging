@@ -92,11 +92,7 @@ int	resched()
 	int store;
 	int pageth;
 	int hasToLookup;
-	int res_lookup = hasToLookup;
-
-	//int old_pid=optr-proctab;
-	// int store,pageth,res_lookup;
-
+// 	int res_lookup = hasToLookup;
 
 	int index = SETZERO;
 	while (index < TWOTEN) {
@@ -119,21 +115,6 @@ int	resched()
 		index = index + SETONE;
 	}
 
-// 	for(i=0;i<NFRAMES;++i){
-// 	if(frm_tab[i].fr_pid==old_pid && frm_tab[i].fr_type==FR_PAGE ){
-// 		res_lookup=bsm_lookup(old_pid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
-// 		if(res_lookup==SYSERR){
-// 			continue;
-// 		}
-// 	//	kprintf("write_bs pid:%d vaddr:%08x store:%d pageth:%d\n",pid,vaddr,store,pageth);
-// 		write_bs((i+FRAME0)*NBPG,store,pageth);
-// 	}
-//
-// }
-
-
-
-
 index = SETZERO;
 	while (index < TWOTEN) {
 		/* code */
@@ -154,21 +135,6 @@ index = SETZERO;
 		}
 		index = index + SETONE;
 	}
-
-	// for(i=0;i<NFRAMES;++i){
-	// 	 if(frm_tab[i].fr_pid==currpid && frm_tab[i].fr_type==FR_PAGE){
-	// 		res_lookup=bsm_lookup(currpid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
-	// 		if(res_lookup==SYSERR){
-	// 			continue;
-	// 		}
-	// 		read_bs((i+FRAME0)*NBPG,store,pageth);
-	// 	}
-	//
-	// }
-
-
-
-
 	set_pdbr(currpid);
 	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
 
