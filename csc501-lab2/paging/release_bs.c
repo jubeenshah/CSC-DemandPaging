@@ -46,7 +46,7 @@ SYSCALL release_bs(bsd_t bs_id) {
   bsm_tab[bs_id].bs_pid[currpid]=0;
   bsm_tab[bs_id].bs_vpno[currpid]=4096;
 
-if(bsm_tab[bs_id].bs_mapping==0){
+if(bsm_tab[bs_id].bs_mapn==0){
   bsm_tab[bs_id].bs_status=BSM_UNMAPPED;
   bsm_tab[bs_id].bs_sem=0;
   //bsm_tab[bs_id].bs_pid=-1;
@@ -56,7 +56,7 @@ if(bsm_tab[bs_id].bs_mapping==0){
 
   //kprintf("FINALLY release store%d\n",bs_id);
 }
-//	kprintf("release_bs pid:%d mapn:%d\n",currpid,bsm_tab[bs_id].bs_mapping);
+//	kprintf("release_bs pid:%d mapn:%d\n",currpid,bsm_tab[bs_id].bs_mapn);
 	restore(ps);
 	return OK;
 }
