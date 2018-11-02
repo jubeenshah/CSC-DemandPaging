@@ -113,61 +113,50 @@
 // 	return((WORD*) SYSERR );
 // }
 
-/* xm.c = xmmap xmunmap */
+/* vgetmem.c - vgetmem */
 
 #include <conf.h>
 #include <kernel.h>
+#include <mem.h>
 #include <proc.h>
 #include <paging.h>
 
-
-/*-------------------------------------------------------------------------
- * xmmap - xmmap
- *-------------------------------------------------------------------------
+extern struct pentry proctab[];
+/*------------------------------------------------------------------------
+ * vgetmem  --  allocate virtual heap storage, returning lowest WORD address
+ *------------------------------------------------------------------------
  */
-SYSCALL xmmap(int virtpage, bsd_t source, int npages)
+WORD	*vgetmem(nbytes)
+	unsigned nbytes;
 {
- // kprintf("xmmap - to be implemented!\n");
-  STATWORD ps;
-  disable(ps);
 
-  if(virtpage<4096 || source<0 || source>=NBS || npages<1 || npages>NPPBS){
-  	restore(ps);
-	return SYSERR;
-  }
-  if(bsm_tab[source].bs_private==1){
-  	restore(ps);
-	return SYSERR;
-  }
-  if(bsm_tab[source].bs_mapn>0 && npages> bsm_tab[source].bs_npages){
-  	restore(ps);
-	return SYSERR;
-  }
+	//kprintf("To be implemented!\n");
+	STATWORD ps;
+	struct mblock *p, *q, *leftover;
+	disable(ps);
 
-  bsm_map(currpid,virtpage,source,npages);
+	if(nbytes==0 || proctab[currpid].vmemlist->mnext== (struct mblock*) NULL ){
+		restore(ps);
+		return SYSERR;
+	}
+	nbytes=(unsigned int ) roundmb(nbytes);
+	q=&proctab[currpid].vmemlist;
+	for(p=q->mnext;p!=(struct mblock*) NULL ;q=p,p=p->mnext){
+		if(p->mlen==nbytes){
+			q->mnext=p->mnext;
+			restore(ps);
+			return ((WORD*)p);
+		}
+		else if(p->mlen>nbytes){
+			leftover=(struct mblock *)((unsigned)p + nbytes);
+			q->mnext=leftover;
+			leftover->mnext=p->mnext;
+			leftover->mlen=p->mlen-nbytes;
+			restore(ps);
+			return ((WORD*)p);
+		}
+	}
+	restore(ps);
 
-  restore(ps);
-  return OK;
-}
-
-
-
-/*-------------------------------------------------------------------------
- * xmunmap - xmunmap
- *-------------------------------------------------------------------------
- */
-SYSCALL xmunmap(int virtpage)
-{
-  //kprintf("To be implemented!");
-  STATWORD ps;
-  disable(ps);
-
-  if(virtpage<4096){
-  	restore(ps);
-	return SYSERR;
-  }
-
-  bsm_unmap(currpid,virtpage);
-  restore(ps);
-  return OK;
+	return((WORD*) SYSERR );
 }
