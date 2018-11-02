@@ -8,6 +8,7 @@
 #define SETZERO 0
 #define SETONE  1
 #define TWOTEN  1024
+#define BS      8
 #define ANDVAL  0xfffff000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
@@ -21,7 +22,7 @@ SYSCALL init_bsm(){
   int index = SETZERO;
   int indexDos;
   int twoFourTen = TWOTEN * 4;
-  while (index<8) { //8 = Number of backing Store
+  while (index<BS) { //8 = Number of backing Store
     /* code */
     bsm_tab[index].bs_status = SETZERO;
     indexDos = SETZERO;
@@ -63,7 +64,7 @@ SYSCALL get_bsm(int* avail) {
   disable(ps);
 
   int index = SETZERO;
-  while (index < 8) { //8 = Number of backing Store
+  while (index < BS) { //8 = Number of backing Store
     /* code */
     int checkStatus = bsm_tab[index].bs_status;
     if ( checkStatus == SETZERO) {
@@ -107,7 +108,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
   int starth = vaddr & ANDVAL;
   int startp = starth >> 12;
 
-  while (index < 8) {
+  while (index < BS) {
     /* code */
     int checkPIDBSM = bsm_tab[index].bs_pid[pid];
     if ( checkPIDBSM == SETONE) {
