@@ -16,6 +16,11 @@
 #define HOLESIZE	(600)
 #define	HOLESTART	(640 * 1024)
 #define	HOLEEND		((1024 + HOLESIZE) * 1024)
+
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
+#define CHOUDA  14
 /* Extra 600 for bootp loading, and monitor */
 
 extern	int	main();	/* address of user's main prog	*/
@@ -37,6 +42,17 @@ struct	mblock	memlist;	/* list of free memory blocks		*/
 struct  tty     tty[Ntty];	/* SLU buffers and mode control		*/
 #endif
 
+bs_map_t bsm_tab[8];
+fr_map_t frm_tab[TWOTEN];
+
+int counter;
+counter = SETZERO;
+int scA[TWOTEN];
+int scPointer;
+
+
+
+
 /* active system status */
 int	numproc;		/* number of live user processes	*/
 int	currpid;		/* id of currently running process	*/
@@ -48,15 +64,6 @@ int	console_dev;		/* the console device			*/
 
 /*  added for the demand paging */
 int page_replace_policy = SC;
-
-/* modified */
-bs_map_t bsm_tab[NBS];
-fr_map_t frm_tab[NFRAMES];
-int pfint_cnt=0;
-int lfu_cnt[NFRAMES];
-int sc_acc[NFRAMES];
-int sc_ptr;
-
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -71,50 +78,56 @@ int sc_ptr;
 /***   not do I/O unless it uses kprintf for polled output.           ***/
 /***								      ***/
 /************************************************************************/
+void initializeDemandPaging() {
+  SYSCALL pfintr();
+  int index       = SETZERO;
+  int indexDos    = SETZERO;
 
+ //kprintf("INIT DEMANDS PAGINF");
+  init_bsm();
+  init_frm();
+  int frameNumber = SETZERO;
 
-/*------------------------------------------------------------------------
- * demand paging initialize. set up page directory and page tables
- *------------------------------------------------------------------------
- */
+  pt_t *pt;
+  pd_t *pd;
+  int limitA =  4;
+  while (index < limitA) {
+    /* code */
+    get_frm(&frameNumber);
+    frm_tab[frameNumber].fr_status  = SETONE;
+    frm_tab[frameNumber].fr_type    = SETONE;
+    frm_tab[frameNumber].fr_pid     = NULLPROC;
 
-void init_paging(){
-	SYSCALL pfintr();
-	int i,j;
-	/* modified */
-	init_bsm();  /* init bsm */
-	init_frm(); /* init frm */
-
-	int frm_num=0;
-	pt_t *pt;
-	pd_t *pd;
-	for(i=0;i<4;++i){
-		get_frm(&frm_num);
-		frm_tab[frm_num].fr_type=FR_TBL;
-		frm_tab[frm_num].fr_status=FRM_MAPPED;
-		frm_tab[frm_num].fr_pid=NULLPROC;
-		pt=(FRAME0 + frm_num)*NBPG;
-		for(j=0;j<1024;++j){
-			pt->pt_pres=1;
-			pt->pt_write=1;
-			pt->pt_user=0;
-			pt->pt_pwt=0;
-			pt->pt_pcd=0;
-			pt->pt_acc=0;
-			pt->pt_dirty=0;
-			pt->pt_mbz=0;
-			pt->pt_global=1;
-			pt->pt_avail=0;
-			pt->pt_base=i*FRAME0 + j;
-			pt++;
-		}
-	}
-	create_page_dir(NULLPROC);
-	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
-	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
-	enable_paging();
+    int a = (TWOTEN + frameNumber) * TWOTEN * 4;
+    // a = a * TWOTEN * 4;
+    pt = a;
+    while (indexDos < TWOTEN) {
+      /* code */
+      pt->pt_pres   = SETONE;
+      pt->pt_write  = SETONE;
+      pt->pt_user   = SETZERO;
+      pt->pt_pwt    = SETZERO;
+      pt->pt_pcd    = SETZERO;
+      pt->pt_acc    = SETZERO;
+      pt->pt_mbz    = SETZERO;
+      pt->pt_dirty  = SETZERO;
+      pt->pt_global = SETONE;
+      pt->pt_avail  = SETZERO;
+      int baseVal = (index * TWOTEN) + indexDos;
+      // baseVal = baseVal + indexDos;
+      pt->pt_base = baseVal;
+      pt = pt + SETONE;
+      indexDos = indexDos + SETONE;
+    }
+    index = index + SETONE;
+  }
+  createPageDir(NULLPROC);
+  pdbr_init(NULLPROC);
+  //int set_evec(unsigned int xnum, u_long handler)
+  // int chouda = 14;
+  set_evec(CHOUDA, pfintr);
+  enable_paging();
 }
-
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
  *------------------------------------------------------------------------
@@ -162,12 +175,28 @@ nulluser()				/* babysit CPU when no one is home */
 #endif
 
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
-
-
+  // kprintf("WHILE");
+  // int i = 0;
+  // while (i < 10) {
+  //   /* code */
+  //   kprintf("%d\n", i);
+  //   i = i + 1;
+  // }
+  // kprintf("FOR++");
+  // for (i = 0; i < 10; i++) {
+  //   /* code */
+  //   kprintf("%d\n", i);
+  // }
+  // kprintf("++FOR");
+  // for (i = 0; i < 10; i++) {
+  //   /* code */
+  //   kprintf("%d \n", i);
+  // }
+  //kprintf("going to main");
 	/* create a process to execute the user's main program */
 	userpid = create(main,INITSTK,INITPRIO,INITNAME,INITARGS);
 	resume(userpid);
-
+  //kprintf("going to main after");
 	while (TRUE)
 		/* empty */;
 }
@@ -222,8 +251,6 @@ sysinit()
 		proctab[i].pstate = PRFREE;
 
 
-
-
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */
 #endif
@@ -233,7 +260,6 @@ sysinit()
 #endif
 
 	mon_init();     /* init monitor */
-
 
 #ifdef NDEVS
 	for (i=0 ; i<NDEVS ; i++ ) {
@@ -265,9 +291,7 @@ sysinit()
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
-
-	init_paging();/* demand paging initialize */
-
+  initializeDemandPaging();
 	return(OK);
 }
 
