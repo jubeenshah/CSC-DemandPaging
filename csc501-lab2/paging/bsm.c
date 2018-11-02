@@ -8,7 +8,7 @@
 #define SETZERO 0
 #define SETONE  1
 #define TWOTEN  1024
-#define BS      8
+#define BS      16
 #define ANDVAL  0xfffff000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
