@@ -7,9 +7,7 @@
 #include <paging.h>
 
 unsigned long currSP;	/* REAL sp of current process */
-#define SETONE 	1
-#define SETZERO	0
-#define TWOTEN 	1024
+
 /*------------------------------------------------------------------------
  * resched  --  reschedule processor to highest priority ready process
  *
@@ -85,53 +83,31 @@ int	resched()
 #ifdef	DEBUG
 	PrintSaved(nptr);
 #endif
-	int a = optr;
-	int b = proctab;
-	int oldProcessID = a - b;
-	int store;
-	int pageth;
-	int hasToLookup;
-	int index = SETZERO;
-	while (index < TWOTEN) {
-		/* code */
-		int checkPid = frm_tab[index].fr_pid;
-		int checkTyp = frm_tab[index].fr_type;
-		if (checkPid == oldProcessID && checkTyp == SETZERO) {
-			/* code */
-			int q = oldProcessID;
-			int w = frm_tab[index].fr_vpno * TWOTEN * 4;
-
-			hasToLookup = bsm_lookup(q,w,&store, &pageth);
-			if (hasToLookup == -SETONE) {
+	int old_pid=optr-proctab;
+	int store,pageth,res_lookup;
+	for(i=0;i<NFRAMES;++i){
+		if(frm_tab[i].fr_pid==old_pid && frm_tab[i].fr_type==FR_PAGE ){
+			res_lookup=bsm_lookup(old_pid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
+			if(res_lookup==SYSERR){
 				continue;
 			}
-			int e = index + TWOTEN;
-			e = e * TWOTEN * 4;
-			write_bs(e, store, pageth);
+		//	kprintf("write_bs pid:%d vaddr:%08x store:%d pageth:%d\n",pid,vaddr,store,pageth);
+			write_bs((i+FRAME0)*NBPG,store,pageth);
 		}
-		index = index + SETONE;
+
 	}
-index = SETZERO;
-	while (index < TWOTEN) {
-		/* code */
-		int checkPIDNew = frm_tab[index].fr_pid;
-		int checkTypeNew = frm_tab[index].fr_type;
-
-		if (checkPIDNew == currpid && checkTypeNew == SETZERO) {
-			/* code */
-			int vpnoTolookup = frm_tab[index].fr_vpno;
-			vpnoTolookup = vpnoTolookup * TWOTEN * 4;
-			hasToLookup = bsm_lookup(currpid, vpnoTolookup, &store, &pageth);
-			if (hasToLookup == -SETONE) {
+	for(i=0;i<NFRAMES;++i){
+		 if(frm_tab[i].fr_pid==currpid && frm_tab[i].fr_type==FR_PAGE){
+			res_lookup=bsm_lookup(currpid,frm_tab[i].fr_vpno*NBPG,&store,&pageth);
+			if(res_lookup==SYSERR){
 				continue;
 			}
-			int frameInt = index + TWOTEN;
-			frameInt = frameInt * TWOTEN * 4;
-			read_bs(frameInt, store, pageth);
+			read_bs((i+FRAME0)*NBPG,store,pageth);
 		}
-		index = index + SETONE;
+
 	}
 	pdbr_init(currpid);
+
 	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
 
 #ifdef	DEBUG
