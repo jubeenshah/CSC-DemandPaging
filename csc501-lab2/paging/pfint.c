@@ -10,43 +10,6 @@ extern int page_replace_policy;
 #define SETONE  1
 #define SETZERO 0
 #define TWOTEN  1024
-
-int pageCreate() {
-  STATWORD ps;
-  disable(ps);
-  int index = SETZERO;
-  kprintf("PFINT To be implemented!\n");
-  int frameNumber;
-  unsigned int frameAddress;
-
-  get_frm(&frameNumber);
-  int twoFourTen = TWOTEN * 4;
-
-  frameAddress = TWOTEN + frameNumber;
-  frameAddress = frameAddress * twoFourTen;
-
-  //pt_t *pageTable;
-  pt_t *pageTable = (pt_t *)frameAddress;
-
-  while (index < TWOTEN) {
-    /* code */
-    pageTable[index].pt_pres  = SETZERO;
-    pageTable[index].pt_write = SETZERO;
-    pageTable[index].pt_user  = SETZERO;
-    pageTable[index].pt_pwt   = SETZERO;
-    pageTable[index].pt_pcd   = SETZERO;
-    pageTable[index].pt_acc   = SETZERO;
-    pageTable[index].pt_dirty = SETZERO;
-    pageTable[index].pt_mbz   = SETZERO;
-    pageTable[index].pt_global= SETZERO;
-    pageTable[index].pt_avail = SETZERO;
-    pageTable[index].pt_base  = SETZERO;
-
-    index = index + 1;
-  }
-  restore(ps);
-  return frameNumber;
-}
 /*-------------------------------------------------------------------------
  * pfint - paging fault ISR
  *-------------------------------------------------------------------------
