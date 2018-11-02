@@ -255,8 +255,8 @@ SYSCALL init_frm()
 		frm_tab[i].fr_dirty=0;
 
 		lfu_cnt[i]=0; /* LFU counter*/
-		sc_acc[i]=0;/* SC policy */
-		sc_ptr=0;
+		scA[i]=0;/* SC policy */
+		scPointer=0;
 	}
 	restore(ps);
 	return OK;
@@ -279,7 +279,7 @@ SYSCALL get_frm(int* avail)
 			*avail=i;
 
 			lfu_cnt[i]++;
-			sc_acc[i]=1;
+			scA[i]=1;
 			restore(ps);
 			return OK;
 		}
@@ -288,7 +288,7 @@ SYSCALL get_frm(int* avail)
 	if(page_replace_policy== SC){
 		frame_number=get_frm_SC();
 		free_frm(frame_number);
-		sc_acc[frame_number]=1;
+		scA[frame_number]=1;
 		*avail=frame_number;
 		restore(ps);
 		return OK;
@@ -393,15 +393,15 @@ int get_frm_SC(){
 	STATWORD ps;
 	disable(ps);
 
-	int i=sc_ptr;
+	int i=scPointer;
 	while(1){
 		i=i%NFRAMES;
 		if(frm_tab[i].fr_type==FR_PAGE){
-			if(sc_acc[i]==1){
-				sc_acc[i]=0;
+			if(scA[i]==1){
+				scA[i]=0;
 			}
 			else{
-				sc_ptr=i+1;
+				scPointer=i+1;
 //				kprintf("get frm %d ------SC \n",i);
 				restore(ps);
 				return i;
