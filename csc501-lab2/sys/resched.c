@@ -86,9 +86,8 @@ int	resched()
 	PrintSaved(nptr);
 #endif
 
-	int a = optr;
-	// int b = proctab;
-	int oldProcessID = a - &proctab;
+
+	int oldProcessID = optr - proctab;
 	int old_pid = oldProcessID;
 	// int store;
 	// int pageth;
