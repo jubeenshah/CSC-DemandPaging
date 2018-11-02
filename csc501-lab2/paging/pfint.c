@@ -15,7 +15,7 @@ int create_page_tab(){
 	int frm_number;
 	unsigned int frm_addr;
 	get_frm(&frm_number);
-//	kprintf("create page table in frm %d for pid %d\n",frm_number,currpid);
+	kprintf("create page table in frm %d for pid %d\n",frm_number,currpid);
 	frm_addr=(FRAME0 + frm_number)*NBPG;
 	pt_t *pt=(pt_t *)frm_addr;
 
