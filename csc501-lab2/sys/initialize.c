@@ -345,7 +345,6 @@ scA// /* initialize.c - nulluser, sizmem, sysinit */
 // 	}
 // 	return npages;
 // }
-
 /* initialize.c - nulluser, sizmem, sysinit */
 
 #include <conf.h>
@@ -400,10 +399,10 @@ int page_replace_policy = SC;
 /* modified */
 bs_map_t bsm_tab[NBS];
 fr_map_t frm_tab[NFRAMES];
-int counter=0;
+int pfint_cnt=0;
 int lfu_cnt[NFRAMES];
-int scA[NFRAMES];
-int scPointer;
+int sc_acc[NFRAMES];
+int sc_ptr;
 
 
 /************************************************************************/
@@ -458,7 +457,7 @@ void init_paging(){
 		}
 	}
 	create_page_dir(NULLPROC);
-	pdbr_init(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
 	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }

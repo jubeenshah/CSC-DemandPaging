@@ -74,7 +74,7 @@
 //   return SETONE;
 // }
 
-/* xm.c = xmmap xmunmap */
+//* xm.c = xmmap xmunmap */
 
 #include <conf.h>
 #include <kernel.h>
