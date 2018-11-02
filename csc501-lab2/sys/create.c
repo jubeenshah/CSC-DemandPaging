@@ -127,11 +127,11 @@ LOCAL int newpid()
 }
 
 void createPageDir(int pid) {
-	//
-  // int frameAvail = SETZERO;
-  // pd_t *pd_entry;
-	// //kprintf("Just before");
-  // get_frm(&frameAvail);
+
+  int frameAvail = SETZERO;
+  pd_t *pd_entry;
+	//kprintf("Just before");
+  get_frm(&frameAvail);
 	// //kprintf("create page directory in frame %d for pid %d\n",frameAvail,index);
 	// //
   // int a = (TWOTEN + frameAvail) * TWOTEN * 4;
@@ -159,9 +159,6 @@ void createPageDir(int pid) {
   //   indexDos = indexDos + SETONE;
   // }
 
-int avail_frame=0;
-pd_t *pd_entry;
-get_frm(&avail_frame);
 
 //	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
 
