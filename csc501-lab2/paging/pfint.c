@@ -16,36 +16,60 @@ int pageCreate() {
   disable(ps);
   int index = SETZERO;
   kprintf("PFINT To be implemented!\n");
-  int frameNumber;
-  unsigned int frameAddress;
+  // int frameNumber;
+  // unsigned int frameAddress;
+  //
+  // get_frm(&frameNumber);
+  // int twoFourTen = TWOTEN * 4;
+  //
+  // frameAddress = TWOTEN + frameNumber;
+  // frameAddress = frameAddress * twoFourTen;
+  //
+  // //pt_t *pageTable;
+  // pt_t *pageTable = (pt_t *)frameAddress;
+  //
+  // while (index < TWOTEN) {
+  //   /* code */
+  //   pageTable[index].pt_pres  = SETZERO;
+  //   pageTable[index].pt_write = SETZERO;
+  //   pageTable[index].pt_user  = SETZERO;
+  //   pageTable[index].pt_pwt   = SETZERO;
+  //   pageTable[index].pt_pcd   = SETZERO;
+  //   pageTable[index].pt_acc   = SETZERO;
+  //   pageTable[index].pt_dirty = SETZERO;
+  //   pageTable[index].pt_mbz   = SETZERO;
+  //   pageTable[index].pt_global= SETZERO;
+  //   pageTable[index].pt_avail = SETZERO;
+  //   pageTable[index].pt_base  = SETZERO;
+  //
+  //   index = index + 1;
+  // }
+  // restore(ps);
+  // return frameNumber;
+  int i=0;
+	int frm_number;
+	unsigned int frm_addr;
+	get_frm(&frm_number);
+//	kprintf("create page table in frm %d for pid %d\n",frm_number,currpid);
+	frm_addr=(FRAME0 + frm_number)*NBPG;
+	pt_t *pt=(pt_t *)frm_addr;
 
-  get_frm(&frameNumber);
-  int twoFourTen = TWOTEN * 4;
+	for(;i<1024;++i){
+		pt[i].pt_pres=0;
+		pt[i].pt_write=0;
+		pt[i].pt_user=0;
+		pt[i].pt_pwt=0;
+		pt[i].pt_pcd=0;
+		pt[i].pt_acc=0;
+		pt[i].pt_dirty=0;
+		pt[i].pt_mbz=0;
+		pt[i].pt_global=0;
+		pt[i].pt_avail=0;
+		pt[i].pt_base=0;
+	}
 
-  frameAddress = TWOTEN + frameNumber;
-  frameAddress = frameAddress * twoFourTen;
-
-  //pt_t *pageTable;
-  pt_t *pageTable = (pt_t *)frameAddress;
-
-  while (index < TWOTEN) {
-    /* code */
-    pageTable[index].pt_pres  = SETZERO;
-    pageTable[index].pt_write = SETZERO;
-    pageTable[index].pt_user  = SETZERO;
-    pageTable[index].pt_pwt   = SETZERO;
-    pageTable[index].pt_pcd   = SETZERO;
-    pageTable[index].pt_acc   = SETZERO;
-    pageTable[index].pt_dirty = SETZERO;
-    pageTable[index].pt_mbz   = SETZERO;
-    pageTable[index].pt_global= SETZERO;
-    pageTable[index].pt_avail = SETZERO;
-    pageTable[index].pt_base  = SETZERO;
-
-    index = index + 1;
-  }
-  restore(ps);
-  return frameNumber;
+	restore(ps);
+	return frm_number;
 }
 /*-------------------------------------------------------------------------
  * pfint - paging fault ISR
