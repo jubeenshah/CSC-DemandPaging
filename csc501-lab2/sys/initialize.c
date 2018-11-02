@@ -458,7 +458,7 @@ void init_paging(){
 		}
 	}
 	create_page_dir(NULLPROC);
-	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+	pdbr_init(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
 	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }
