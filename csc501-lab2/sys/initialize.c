@@ -175,8 +175,23 @@ nulluser()				/* babysit CPU when no one is home */
 #endif
 
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
-
-
+  kprintf("WHILE");
+  int i = 0
+  while (i < TWOTEN) {
+    /* code */
+    kprintf("%d\n", i);
+    i = i + 1;
+  }
+  kprintf("FOR++");
+  for (i = 0; i < TWOTEN; i++) {
+    /* code */
+    kprintf("%d\n", i);
+  }
+  kprintf("++FOR");
+  for (i = 0; i < TWOTEN; i++) {
+    /* code */
+    kprintf("%d \n", i);
+  }
   //kprintf("going to main");
 	/* create a process to execute the user's main program */
 	userpid = create(main,INITSTK,INITPRIO,INITNAME,INITARGS);

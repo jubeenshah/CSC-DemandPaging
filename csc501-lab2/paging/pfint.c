@@ -5,6 +5,8 @@
 #include <paging.h>
 #include <proc.h>
 
+extern int page_replace_policy;
+
 #define SETONE  1
 #define SETZERO 0
 #define TWOTEN  1024
