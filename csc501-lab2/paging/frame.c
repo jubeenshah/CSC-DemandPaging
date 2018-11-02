@@ -183,7 +183,7 @@ int getFrameSC() {
   STATWORD ps;
   disable(ps);
   int index = SETZERO;
-  index = index + scPointer;
+  index = index + sc_ptr;
 
   while(SETONE) {
     index = index % TWOTEN;
@@ -194,7 +194,7 @@ int getFrameSC() {
         int updateSCVAL = SETZERO;
         sc_acc[index] = updateSCVAL;
       } else {
-        scPointer = index + SETONE;
+        sc_ptr = index + SETONE;
         restore (ps);
         return index;
       }
