@@ -176,7 +176,7 @@ nulluser()				/* babysit CPU when no one is home */
 
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
   kprintf("WHILE");
-  int i = 0
+  int i = 0;
   while (i < TWOTEN) {
     /* code */
     kprintf("%d\n", i);
