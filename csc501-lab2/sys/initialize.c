@@ -1,4 +1,4 @@
-// /* initialize.c - nulluser, sizmem, sysinit */
+scA// /* initialize.c - nulluser, sizmem, sysinit */
 //
 // #include <conf.h>
 // #include <i386.h>
@@ -400,10 +400,10 @@ int page_replace_policy = SC;
 /* modified */
 bs_map_t bsm_tab[NBS];
 fr_map_t frm_tab[NFRAMES];
-int pfint_cnt=0;
+int counter=0;
 int lfu_cnt[NFRAMES];
-int sc_acc[NFRAMES];
-int sc_ptr;
+int scA[NFRAMES];
+int scPointer;
 
 
 /************************************************************************/

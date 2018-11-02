@@ -149,7 +149,7 @@ SYSCALL kill(int pid)
 	}
 	/* modified */
 	release_bs(proctab[pid].store);
-	out_frm(pid);
+	frameDefine(pid);
 
 	restore(ps);
 	return(OK);
