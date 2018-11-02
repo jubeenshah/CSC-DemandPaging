@@ -160,12 +160,12 @@ void createPageDir(int pid) {
   // }
 
 
-//	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
+//	kprintf("create page directory in frame %d for pid %d\n",frameAvail,pid);
 
-proctab[pid].pdbr=(FRAME0+ avail_frame)*NBPG;
-frm_tab[avail_frame].fr_status=FRM_MAPPED;
-frm_tab[avail_frame].fr_type=FR_DIR;
-frm_tab[avail_frame].fr_pid=pid;
+proctab[pid].pdbr=(FRAME0+ frameAvail)*NBPG;
+frm_tab[frameAvail].fr_status=FRM_MAPPED;
+frm_tab[frameAvail].fr_type=FR_DIR;
+frm_tab[frameAvail].fr_pid=pid;
 pd_entry= proctab[pid].pdbr;
 int i=0;
 for(;i<NBPG/sizeof(pd_t);++i){/*supposed 4096/4 = 1024 */
