@@ -161,7 +161,7 @@ typedef struct{
   int bs_sem;				/* semaphore mechanism ?	*/
 
   int bs_private;           /* private heap use? */
-  int bs_mapn;              /* n process map into this backing store */
+  int bs_mapping;              /* n process map into this backing store */
 } bs_map_t;
 
 typedef struct{
