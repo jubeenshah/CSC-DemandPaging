@@ -47,8 +47,8 @@ fr_map_t frm_tab[TWOTEN];
 
 int counter;
 counter = SETZERO;
-int scA[TWOTEN];
-int scPointer;
+int sc_acc[TWOTEN];
+int sc_ptr;
 
 
 
