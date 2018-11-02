@@ -53,7 +53,7 @@ int pageCreate() {
  */
 SYSCALL pfint()
 {
-  counter = counter + 1;
+  pfint_cnt = pfint_cnt + 1;
 
   STATWORD ps;
   disable(ps);
