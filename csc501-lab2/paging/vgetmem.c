@@ -1,66 +1,173 @@
-/* vgetmem.c - vgetmem */
+// // /* vgetmem.c - vgetmem */
+// //
+// // #include <conf.h>
+// // #include <kernel.h>
+// // #include <mem.h>
+// // #include <proc.h>
+// // #include <paging.h>
+// //
+// // #define SETZERO 0
+// // #define SETONE  1
+// // #define TWOTEN  1024
+// //
+// // extern struct pentry proctab[];
+// // /*------------------------------------------------------------------------
+// //  * vgetmem  --  allocate virtual heap storage, returning lowest WORD address
+// //  *------------------------------------------------------------------------
+// //  */
+// // WORD	*vgetmem(nbytes)
+// // 	unsigned nbytes;
+// // {
+// // 	STATWORD ps;
+// // 	struct mblock *index;
+// // 	struct mblock *indexDos;
+// // 	struct mblock *indexTres;
+// // 	kprintf("VGETMEM To be implemented!\n");
+// //
+// // int checkList = proctab[currpid].vmemlist->mnext;
+// //
+// // if (nbytes == SETZERO || checkList == (struct mblock*)NULL) {
+// // 	/* code */
+// // 	restore(ps);
+// // 	return -SETONE;
+// // }
+// //
+// // int listFor;
+// // nbytes = (unsigned int) roundmb(nbytes);
+// // listFor = &proctab[currpid].vmemlist;
+// // indexDos = listFor;
+// // index = indexDos->mnext;
+// // while (index != (struct mblock *)NULL) {
+// // 	/* code */
+// // 	int checkMlen = index->mlen;
+// // 	if (checkMlen == nbytes) {
+// // 		/* code */
+// // 		indexDos->mnext = index->mnext;
+// // 		restore (ps);
+// // 		return ((WORD*)index);
+// // 	} else if(checkMlen > nbytes) {
+// // 		int conv = (unsigned)index + nbytes;
+// // 		indexTres = (struct mblock *) (conv);
+// //
+// // 		indexDos->mnext = indexTres;
+// // 		indexTres->mnext = index->mnext;
+// // 		int sub = index->mlen - nbytes;
+// // 		indexTres->mlen = sub;
+// //
+// // 		restore(ps);
+// // 		return ((WORD*)index);
+// // 	}
+// //
+// // 	indexDos = index;
+// // 	index = index->mnext;
+// // }
+// // 	restore(ps);
+// // 	return((WORD*) -SETONE );
+// // }
+//
+// /* vgetmem.c - vgetmem */
+//
+// #include <conf.h>
+// #include <kernel.h>
+// #include <mem.h>
+// #include <proc.h>
+// #include <paging.h>
+//
+// extern struct pentry proctab[];
+// /*------------------------------------------------------------------------
+//  * vgetmem  --  allocate virtual heap storage, returning lowest WORD address
+//  *------------------------------------------------------------------------
+//  */
+// WORD	*vgetmem(nbytes)
+// 	unsigned nbytes;
+// {
+//
+// 	//kprintf("To be implemented!\n");
+// 	STATWORD ps;
+// 	struct mblock *p, *q, *leftover;
+// 	disable(ps);
+//
+// 	if(nbytes==0 || proctab[currpid].vmemlist->mnext== (struct mblock*) NULL ){
+// 		restore(ps);
+// 		return SYSERR;
+// 	}
+// 	nbytes=(unsigned int ) roundmb(nbytes);
+// 	q=&proctab[currpid].vmemlist;
+// 	for(p=q->mnext;p!=(struct mblock*) NULL ;q=p,p=p->mnext){
+// 		if(p->mlen==nbytes){
+// 			q->mnext=p->mnext;
+// 			restore(ps);
+// 			return ((WORD*)p);
+// 		}
+// 		else if(p->mlen>nbytes){
+// 			leftover=(struct mblock *)((unsigned)p + nbytes);
+// 			q->mnext=leftover;
+// 			leftover->mnext=p->mnext;
+// 			leftover->mlen=p->mlen-nbytes;
+// 			restore(ps);
+// 			return ((WORD*)p);
+// 		}
+// 	}
+// 	restore(ps);
+//
+// 	return((WORD*) SYSERR );
+// }
+
+/* xm.c = xmmap xmunmap */
 
 #include <conf.h>
 #include <kernel.h>
-#include <mem.h>
 #include <proc.h>
 #include <paging.h>
 
-#define SETZERO 0
-#define SETONE  1
-#define TWOTEN  1024
 
-extern struct pentry proctab[];
-/*------------------------------------------------------------------------
- * vgetmem  --  allocate virtual heap storage, returning lowest WORD address
- *------------------------------------------------------------------------
+/*-------------------------------------------------------------------------
+ * xmmap - xmmap
+ *-------------------------------------------------------------------------
  */
-WORD	*vgetmem(nbytes)
-	unsigned nbytes;
+SYSCALL xmmap(int virtpage, bsd_t source, int npages)
 {
-	STATWORD ps;
-	struct mblock *index;
-	struct mblock *indexDos;
-	struct mblock *indexTres;
-	kprintf("VGETMEM To be implemented!\n");
+ // kprintf("xmmap - to be implemented!\n");
+  STATWORD ps;
+  disable(ps);
 
-int checkList = proctab[currpid].vmemlist->mnext;
+  if(virtpage<4096 || source<0 || source>=NBS || npages<1 || npages>NPPBS){
+  	restore(ps);
+	return SYSERR;
+  }
+  if(bsm_tab[source].bs_private==1){
+  	restore(ps);
+	return SYSERR;
+  }
+  if(bsm_tab[source].bs_mapn>0 && npages> bsm_tab[source].bs_npages){
+  	restore(ps);
+	return SYSERR;
+  }
 
-if (nbytes == SETZERO || checkList == (struct mblock*)NULL) {
-	/* code */
-	restore(ps);
-	return -SETONE;
+  bsm_map(currpid,virtpage,source,npages);
+
+  restore(ps);
+  return OK;
 }
 
-int listFor;
-nbytes = (unsigned int) roundmb(nbytes);
-listFor = &proctab[currpid].vmemlist;
-indexDos = listFor;
-index = indexDos->mnext;
-while (index != (struct mblock *)NULL) {
-	/* code */
-	int checkMlen = index->mlen;
-	if (checkMlen == nbytes) {
-		/* code */
-		indexDos->mnext = index->mnext;
-		restore (ps);
-		return ((WORD*)index);
-	} else if(checkMlen > nbytes) {
-		int conv = (unsigned)index + nbytes;
-		indexTres = (struct mblock *) (conv);
 
-		indexDos->mnext = indexTres;
-		indexTres->mnext = index->mnext;
-		int sub = index->mlen - nbytes;
-		indexTres->mlen = sub;
 
-		restore(ps);
-		return ((WORD*)index);
-	}
+/*-------------------------------------------------------------------------
+ * xmunmap - xmunmap
+ *-------------------------------------------------------------------------
+ */
+SYSCALL xmunmap(int virtpage)
+{
+  //kprintf("To be implemented!");
+  STATWORD ps;
+  disable(ps);
 
-	indexDos = index;
-	index = index->mnext;
-}
-	restore(ps);
-	return((WORD*) -SETONE );
+  if(virtpage<4096){
+  	restore(ps);
+	return SYSERR;
+  }
+
+  bsm_unmap(currpid,virtpage);
+  restore(ps);
+  return OK;
 }
