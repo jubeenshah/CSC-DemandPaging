@@ -85,16 +85,14 @@ int	resched()
 #ifdef	DEBUG
 	PrintSaved(nptr);
 #endif
-
-
-	int oldProcessID = optr - proctab;
-	int old_pid = oldProcessID;
 	int store;
 	int pageth;
 	int hasToLookup;
-// 	int res_lookup = hasToLookup;
-
+	int old_pid
+	int oldProcessID;
+	oldProcessID = optr - proctab;
 	int index = SETZERO;
+	old_pid = oldProcessID;
 	while (index < TWOTEN) {
 		/* code */
 		int checkPid = frm_tab[index].fr_pid;
