@@ -45,8 +45,8 @@ struct  tty     tty[Ntty];	/* SLU buffers and mode control		*/
 bs_map_t bsm_tab[8];
 fr_map_t frm_tab[TWOTEN];
 
-int counter;
-counter = SETZERO;
+int pfint_cnt;
+pfint_cnt = SETZERO;
 int sc_acc[TWOTEN];
 int sc_ptr;
 
