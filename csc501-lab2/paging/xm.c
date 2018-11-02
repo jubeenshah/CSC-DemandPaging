@@ -23,7 +23,7 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   if (virtpage < (4*TWOTEN) || source < SETZERO || source >= (TWOTEN/128) || npages < SETONE || npages > (TWOTEN / 4)) {
     /* code */
     restore(ps);
-    return -SETONE;
+    return SYSERR;
   }
 
   int checkPrivateValue = bsm_tab[source].bs_private;
@@ -31,20 +31,21 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   if (checkPrivateValue == SETONE) {
     /* code */
     restore(ps);
-    return -SETONE;
+    return SYSERR;
   }
   int checkMapVal = bsm_tab[source].bs_mapping;
   int checkNpages = bsm_tab[source].bs_npages;
   if (checkMapVal > SETZERO && npages > checkNpages) {
     /* code */
     restore(ps);
-    return -SETONE;
+    return SYSERR;
   }
   int c = currpid;
   int v = virtpage;
   int s = source;
   int n = npages;
   bsm_map(c,v,s,n);
+  //bsm_map(currpid,virtpage,source,npages);
 
   restore(ps);
   return OK;
@@ -65,10 +66,10 @@ SYSCALL xmunmap(int virtpage)
 
   if (virtpage < (TWOTEN * 4)) {
     restore(ps);
-    return -SETONE;
+    return SYSERR;
   }
 
   bsm_unmap(currpid, virtpage);
   restore(ps);
-  return SETONE;
+  return OK;
 }
