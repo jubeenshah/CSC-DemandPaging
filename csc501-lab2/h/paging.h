@@ -104,9 +104,6 @@
 // extern int scPointer;
 
 /* paging.h */
-/* paging.h */
-
-/* paging.h */
 
 #ifndef _PAGING_H_
 #define _PAGING_H_
@@ -198,8 +195,8 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define FRAME0		1024	/* zero-th frame		*/
 #define NFRAMES 	1024	/* number of frames		*/
 /*modified*/
-#define NBS 8 /* number of backing store */
-#define NPPBS 256 /* number of pages per backing store */
+#define NBS 16 /* number of backing store */
+#define NPPBS 128 /* number of pages per backing store */
 
 
 

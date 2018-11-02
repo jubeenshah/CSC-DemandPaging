@@ -1,4 +1,4 @@
-scA// /* initialize.c - nulluser, sizmem, sysinit */
+// /* initialize.c - nulluser, sizmem, sysinit */
 //
 // #include <conf.h>
 // #include <i386.h>
