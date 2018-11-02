@@ -16,7 +16,7 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   STATWORD ps;
   disable(ps);
 
-  if(virtpage<4096 || source<0 || source>=8 || npages<1 || npages>256){
+  if(virtpage<(TWOTEN * 4) || source<(TWOTEN - TWOTEN) || source>=(TWOTEN / 128) || npages<(TWOTEN / TWOTEN) || npages>(TWOTEN / 4)){
   	restore(ps);
 	return SYSERR;
   }
