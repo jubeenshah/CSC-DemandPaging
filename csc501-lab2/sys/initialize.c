@@ -107,15 +107,15 @@ void init_paging(){
 		for(j=SETZERO;j<TWOTEN;++j){
 			pt->pt_pres=SETONE;
 			pt->pt_write=SETONE;
-			pt->pt_user=0;
-			pt->pt_pwt=0;
-			pt->pt_pcd=0;
-			pt->pt_acc=0;
-			pt->pt_dirty=0;
-			pt->pt_mbz=0;
+			pt->pt_user=SETZERO;
+			pt->pt_pwt=SETZERO;
+			pt->pt_pcd=SETZERO;
+			pt->pt_acc=SETZERO;
+			pt->pt_dirty=SETZERO;
+			pt->pt_mbz=SETZERO;
 			pt->pt_global=SETONE;
-			pt->pt_avail=0;
-			pt->pt_base=i*FRAME0 + j;
+			pt->pt_avail=SETZERO;
+			pt->pt_base=i*TWOTEN + j;
 			pt++;
 		}
 	}
