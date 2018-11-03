@@ -51,9 +51,10 @@ int page_replace_policy = SC;
 
 /* modified */
 bs_map_t bsm_tab[NBS];
-fr_map_t frm_tab[1024];
-int pfint_cnt = SETZERO;
-int sc_acc[1024];
+fr_map_t frm_tab[NFRAMES];
+int pfint_cnt=0;
+int lfu_cnt[NFRAMES];
+int sc_acc[NFRAMES];
 int sc_ptr;
 
 
