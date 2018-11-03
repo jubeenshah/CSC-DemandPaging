@@ -100,20 +100,20 @@ void init_paging(){
 
 	for(i=SETZERO;i<(SETONE * 4);++i){
 		get_frm(&frm_num);
-		frm_tab[frm_num].fr_type=FR_TBL;
-		frm_tab[frm_num].fr_status=FRM_MAPPED;
+		frm_tab[frm_num].fr_type=SETONE;
+		frm_tab[frm_num].fr_status=SETONE;
 		frm_tab[frm_num].fr_pid=NULLPROC;
 		pt=(FRAME0 + frm_num)*NBPG;
 		for(j=SETZERO;j<TWOTEN;++j){
-			pt->pt_pres=1;
-			pt->pt_write=1;
+			pt->pt_pres=SETONE;
+			pt->pt_write=SETONE;
 			pt->pt_user=0;
 			pt->pt_pwt=0;
 			pt->pt_pcd=0;
 			pt->pt_acc=0;
 			pt->pt_dirty=0;
 			pt->pt_mbz=0;
-			pt->pt_global=1;
+			pt->pt_global=SETONE;
 			pt->pt_avail=0;
 			pt->pt_base=i*FRAME0 + j;
 			pt++;
