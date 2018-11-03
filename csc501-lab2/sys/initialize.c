@@ -83,10 +83,10 @@ int sc_ptr;
 
 void init_paging(){
 	SYSCALL pfintr();
-	int i;
+	int index;
   int j;
 
-  i = SETZERO;
+  index = SETZERO;
   j = SETZERO;
 	/* modified */
 	init_bsm();  /* init bsm */
@@ -98,7 +98,7 @@ void init_paging(){
 	pt_t *pt;
 	pd_t *pd;
 
-	for(i=SETZERO;i<(SETONE * 4);i = i + SETONE){
+	for(iindexSETZERO;index<(SETONE * 4);index = index + SETONE){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=SETONE;
 		frm_tab[frm_num].fr_status=SETONE;
@@ -115,7 +115,7 @@ void init_paging(){
 			pt->pt_mbz=SETZERO;
 			pt->pt_global=SETONE;
 			pt->pt_avail=SETZERO;
-			pt->pt_base=i*TWOTEN + j;
+			pt->pt_base=index*TWOTEN + j;
 			pt = pt + SETONE;
 		}
 	}
