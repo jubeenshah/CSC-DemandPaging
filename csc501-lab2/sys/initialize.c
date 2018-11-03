@@ -89,7 +89,8 @@ void init_paging(){
 	init_bsm();  /* init bsm */
 	init_frm(); /* init frm */
 
-	int frm_num=0;
+	int frm_num;
+  frm_num = SETZERO;
 	pt_t *pt;
 	pd_t *pd;
 	for(i=0;i<4;++i){
