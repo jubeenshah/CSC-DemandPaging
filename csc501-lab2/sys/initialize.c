@@ -98,13 +98,13 @@ void init_paging(){
 	pt_t *pt;
 	pd_t *pd;
 
-	for(i=SETZERO;i<(SETONE * 4);i++){
+	for(i=SETZERO;i<(SETONE * 4);i = i + SETONE){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=SETONE;
 		frm_tab[frm_num].fr_status=SETONE;
 		frm_tab[frm_num].fr_pid=0;
 		pt=(TWOTEN + frm_num)*TWOTEN * 4;
-		for(j=SETZERO;j<TWOTEN;j++){
+		for(j=SETZERO;j<TWOTEN;j = j + SETONE){
 			pt->pt_pres=SETONE;
 			pt->pt_write=SETONE;
 			pt->pt_user=SETZERO;
