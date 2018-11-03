@@ -83,14 +83,18 @@ int sc_ptr;
 
 void init_paging(){
 	SYSCALL pfintr();
-	int i = SETZERO;
-  int j = SETZERO;
+	int i;
+  int j;
+
+  i = SETZERO;
+  j = SETZERO;
 	/* modified */
 	init_bsm();  /* init bsm */
 	init_frm(); /* init frm */
 
 	int frm_num;
   frm_num = SETZERO;
+
 	pt_t *pt;
 	pd_t *pd;
 	for(i=0;i<4;++i){
