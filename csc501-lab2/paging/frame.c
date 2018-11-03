@@ -15,7 +15,7 @@ extern int page_replace_policy;
  *-------------------------------------------------------------------------
  */
 SYSCALL init_frm(){
-  kprintf("FRAMETo be implemented!\n");
+  //kprintf("FRAMETo be implemented!\n");
 
   STATWORD ps;
   disable(ps);
