@@ -78,19 +78,30 @@ int page_replace_policy = SC;
 /***								      ***/
 /************************************************************************/
 void initializeDemandPaging() {
+ //  SYSCALL pfintr();
+ //  int index       = SETZERO;
+ //  int indexDos    = SETZERO;
+ //  int i,j;
+ //
+ // //kprintf("INIT DEMANDS PAGINF");
+ //  init_bsm();
+ //  init_frm();
+ //  int frameNumber = SETZERO;
+ //  int frm_num = SETZERO;
+ //
+ //  pt_t *pt;
+ //  pd_t *pd;
+
+
   SYSCALL pfintr();
-  int index       = SETZERO;
-  int indexDos    = SETZERO;
-  int i,j;
+int i,j;
+/* modified */
+init_bsm();  /* init bsm */
+init_frm(); /* init frm */
 
- //kprintf("INIT DEMANDS PAGINF");
-  init_bsm();
-  init_frm();
-  int frameNumber = SETZERO;
-  int frm_num = SETZERO;
-
-  pt_t *pt;
-  pd_t *pd;
+int frm_num=0;
+pt_t *pt;
+pd_t *pd;
   // int limitA =  4;
   // while (index < limitA) {
   //   /* code */
@@ -144,17 +155,15 @@ void initializeDemandPaging() {
 	}
 
 
-  create_page_dir(NULLPROC);
-  set_pdbr(NULLPROC);
-  //int set_evec(unsigned int xnum, u_long handler)
-  // int chouda = 14;
-  set_evec(14, pfintr);
-  enable_paging();
+  // create_page_dir(NULLPROC);
+  // set_pdbr(NULLPROC);
+  // set_evec(14, pfintr);
+  // enable_paging();
 
-// create_page_dir(NULLPROC);
-// set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
-// set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
-// enable_paging();
+  create_page_dir(NULLPROC);
+  set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+  set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
+  enable_paging();
 }
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
