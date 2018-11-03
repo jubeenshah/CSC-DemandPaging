@@ -97,14 +97,14 @@ void init_paging(){
 
 	pt_t *pt;
 	pd_t *pd;
-  
-	for(i=0;i<4;++i){
+
+	for(i=SETZERO;i<(SETONE * 4);++i){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=FR_TBL;
 		frm_tab[frm_num].fr_status=FRM_MAPPED;
 		frm_tab[frm_num].fr_pid=NULLPROC;
 		pt=(FRAME0 + frm_num)*NBPG;
-		for(j=0;j<1024;++j){
+		for(j=SETZERO;j<TWOTEN;++j){
 			pt->pt_pres=1;
 			pt->pt_write=1;
 			pt->pt_user=0;
