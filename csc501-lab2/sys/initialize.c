@@ -50,11 +50,11 @@ int	console_dev;		/* the console device			*/
 int page_replace_policy = SC;
 
 /* modified */
-bs_map_t bsm_tab[NBS];
-fr_map_t frm_tab[NFRAMES];
+bs_map_t bsm_tab[8];
+fr_map_t frm_tab[1024];
 int pfint_cnt=0;
-int lfu_cnt[NFRAMES];
-int sc_acc[NFRAMES];
+int lfu_cnt[1024];
+int sc_acc[1024];
 int sc_ptr;
 
 
