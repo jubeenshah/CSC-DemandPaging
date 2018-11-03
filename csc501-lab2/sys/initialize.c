@@ -49,16 +49,14 @@ int	console_dev;		/* the console device			*/
 /*  added for the demand paging */
 int page_replace_policy = SC;
 
-#define SETONE  1
-#define SETZERO 0
-#define TWOTEN  1024
-
-
+/* modified */
 bs_map_t bsm_tab[NBS];
 fr_map_t frm_tab[1024];
 int pfint_cnt = SETZERO;
 int sc_acc[1024];
 int sc_ptr;
+
+
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -73,7 +71,14 @@ int sc_ptr;
 /***   not do I/O unless it uses kprintf for polled output.           ***/
 /***								      ***/
 /************************************************************************/
-void initializeDemandPaging() {
+
+
+/*------------------------------------------------------------------------
+ * demand paging initialize. set up page directory and page tables
+ *------------------------------------------------------------------------
+ */
+
+void init_paging() {
   SYSCALL pfintr();
 	int i,j;
 	/* modified */
@@ -109,6 +114,7 @@ void initializeDemandPaging() {
 	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }
+
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
  *------------------------------------------------------------------------
@@ -156,6 +162,7 @@ nulluser()				/* babysit CPU when no one is home */
 #endif
 
 	kprintf("clock %sabled\n", clkruns == 1?"en":"dis");
+
 
   /* create a process to execute the user's main program */
 	userpid = create(main,INITSTK,INITPRIO,INITNAME,INITARGS);
@@ -215,6 +222,8 @@ sysinit()
 		proctab[i].pstate = PRFREE;
 
 
+
+
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */
 #endif
@@ -224,6 +233,7 @@ sysinit()
 #endif
 
 	mon_init();     /* init monitor */
+
 
 #ifdef NDEVS
 	for (i=0 ; i<NDEVS ; i++ ) {
@@ -255,8 +265,10 @@ sysinit()
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
-  initializeDemandPaging();
-	return(OK);
+
+  init_paging(); /* demand paging initialize */
+
+  return(OK);
 }
 
 stop(s)
