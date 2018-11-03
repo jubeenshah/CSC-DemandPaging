@@ -103,7 +103,7 @@ void init_paging(){
 		frm_tab[frm_num].fr_type=SETONE;
 		frm_tab[frm_num].fr_status=SETONE;
 		frm_tab[frm_num].fr_pid=NULLPROC;
-		pt=(FRAME0 + frm_num)*NBPG;
+		pt=(TWOTEN + frm_num)*TWOTEN * 4;
 		for(j=SETZERO;j<TWOTEN;++j){
 			pt->pt_pres=SETONE;
 			pt->pt_write=SETONE;
@@ -116,7 +116,7 @@ void init_paging(){
 			pt->pt_global=SETONE;
 			pt->pt_avail=SETZERO;
 			pt->pt_base=i*TWOTEN + j;
-			pt++;
+			pt = pt + SETONE;
 		}
 	}
 	create_page_dir(NULLPROC);
