@@ -50,11 +50,14 @@ int	console_dev;		/* the console device			*/
 int page_replace_policy = SC;
 
 /* modified */
-bs_map_t bsm_tab[8];
-fr_map_t frm_tab[1024];
-int pfint_cnt=0;
-int lfu_cnt[1024];
-int sc_acc[1024];
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
+bs_map_t bsm_tab[SETONE * 8];
+fr_map_t frm_tab[TWOTEN];
+int pfint_cnt=SETZERO;
+int lfu_cnt[TWOTEN];
+int sc_acc[TWOTEN];
 int sc_ptr;
 
 
