@@ -98,7 +98,7 @@ void init_paging(){
 	pt_t *pt;
 	pd_t *pd;
 
-	for(iindexSETZERO;index<(SETONE * 4);index = index + SETONE){
+	for(index = SETZERO;index<(SETONE * 4);index = index + SETONE){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=SETONE;
 		frm_tab[frm_num].fr_status=SETONE;
