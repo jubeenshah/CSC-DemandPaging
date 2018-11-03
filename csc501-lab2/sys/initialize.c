@@ -17,10 +17,7 @@
 #define	HOLESTART	(640 * 1024)
 #define	HOLEEND		((1024 + HOLESIZE) * 1024)
 
-#define SETONE  1
-#define SETZERO 0
-#define TWOTEN  1024
-#define CHOUDA  14
+
 /* Extra 600 for bootp loading, and monitor */
 
 extern	int	main();	/* address of user's main prog	*/
@@ -42,12 +39,7 @@ struct	mblock	memlist;	/* list of free memory blocks		*/
 struct  tty     tty[Ntty];	/* SLU buffers and mode control		*/
 #endif
 
-bs_map_t bsm_tab[8];
-fr_map_t frm_tab[TWOTEN];
-int pfint_cnt;
-pfint_cnt = SETZERO;
-int sc_acc[TWOTEN];
-int sc_ptr;
+
 
 
 
@@ -63,6 +55,18 @@ int	console_dev;		/* the console device			*/
 
 /*  added for the demand paging */
 int page_replace_policy = SC;
+
+#define SETONE  1
+#define SETZERO 0
+#define TWOTEN  1024
+
+
+bs_map_t bsm_tab[NBS];
+fr_map_t frm_tab[1024];
+int pfint_cnt;
+pfint_cnt = SETZERO;
+int sc_acc[1024];
+int sc_ptr;
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -91,17 +95,6 @@ void initializeDemandPaging() {
  //
  //  pt_t *pt;
  //  pd_t *pd;
-
-
-  SYSCALL pfintr();
-int i,j;
-/* modified */
-init_bsm();  /* init bsm */
-init_frm(); /* init frm */
-
-int frm_num=0;
-pt_t *pt;
-pd_t *pd;
   // int limitA =  4;
   // while (index < limitA) {
   //   /* code */
@@ -131,8 +124,20 @@ pd_t *pd;
   //   }
   //   index = index + SETONE;
   // }
+  // create_page_dir(NULLPROC);
+  // set_pdbr(NULLPROC);
+  // set_evec(14, pfintr);
+  // enable_paging();
+  SYSCALL pfintr();
+	int i,j;
+	/* modified */
+	init_bsm();  /* init bsm */
+	init_frm(); /* init frm */
 
-  for(i=0;i<4;++i){
+	int frm_num=0;
+	pt_t *pt;
+	pd_t *pd;
+	for(i=0;i<4;++i){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=FR_TBL;
 		frm_tab[frm_num].fr_status=FRM_MAPPED;
@@ -153,17 +158,10 @@ pd_t *pd;
 			pt++;
 		}
 	}
-
-
-  // create_page_dir(NULLPROC);
-  // set_pdbr(NULLPROC);
-  // set_evec(14, pfintr);
-  // enable_paging();
-
-  create_page_dir(NULLPROC);
-  set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
-  set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
-  enable_paging();
+	create_page_dir(NULLPROC);
+	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
+	enable_paging();
 }
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
