@@ -102,7 +102,7 @@ void init_paging(){
 		get_frm(&frm_num);
 		frm_tab[frm_num].fr_type=SETONE;
 		frm_tab[frm_num].fr_status=SETONE;
-		frm_tab[frm_num].fr_pid=NULLPROC;
+		frm_tab[frm_num].fr_pid=0;
 		pt=(TWOTEN + frm_num)*TWOTEN * 4;
 		for(j=SETZERO;j<TWOTEN;++j){
 			pt->pt_pres=SETONE;
@@ -119,8 +119,8 @@ void init_paging(){
 			pt = pt + SETONE;
 		}
 	}
-	create_page_dir(NULLPROC);
-	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+	create_page_dir(0);
+	set_pdbr(0);/*Set the PDBR register to the page directory for the NULL process.*/
 	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }
