@@ -97,53 +97,28 @@ void init_paging(){
 
 	pt_t *pt;
 	pd_t *pd;
-
-  while (i < 4) {
-    /* code */
-    get_frm(&frm_num);
-    frm_tab[frm_num].fr_type=FR_TBL;
-    frm_tab[frm_num].fr_status=FRM_MAPPED;
-    frm_tab[frm_num].fr_pid=NULLPROC;
-    pt=(FRAME0 + frm_num)*NBPG;
-    while (j < 1024) {
-      /* code */
-      pt->pt_pres=1;
-      pt->pt_write=1;
-      pt->pt_user=0;
-      pt->pt_pwt=0;
-      pt->pt_pcd=0;
-      pt->pt_acc=0;
-      pt->pt_dirty=0;
-      pt->pt_mbz=0;
-      pt->pt_global=1;
-      pt->pt_avail=0;
-      pt->pt_base=i*FRAME0 + j;
-      pt++;
-      j++;
-    }
-    i++;
-  }
-	// for(i=0;i<4;++i){
-	// 	get_frm(&frm_num);
-	// 	frm_tab[frm_num].fr_type=FR_TBL;
-	// 	frm_tab[frm_num].fr_status=FRM_MAPPED;
-	// 	frm_tab[frm_num].fr_pid=NULLPROC;
-	// 	pt=(FRAME0 + frm_num)*NBPG;
-	// 	for(j=0;j<1024;++j){
-	// 		pt->pt_pres=1;
-	// 		pt->pt_write=1;
-	// 		pt->pt_user=0;
-	// 		pt->pt_pwt=0;
-	// 		pt->pt_pcd=0;
-	// 		pt->pt_acc=0;
-	// 		pt->pt_dirty=0;
-	// 		pt->pt_mbz=0;
-	// 		pt->pt_global=1;
-	// 		pt->pt_avail=0;
-	// 		pt->pt_base=i*FRAME0 + j;
-	// 		pt++;
-	// 	}
-	// }
+  
+	for(i=0;i<4;++i){
+		get_frm(&frm_num);
+		frm_tab[frm_num].fr_type=FR_TBL;
+		frm_tab[frm_num].fr_status=FRM_MAPPED;
+		frm_tab[frm_num].fr_pid=NULLPROC;
+		pt=(FRAME0 + frm_num)*NBPG;
+		for(j=0;j<1024;++j){
+			pt->pt_pres=1;
+			pt->pt_write=1;
+			pt->pt_user=0;
+			pt->pt_pwt=0;
+			pt->pt_pcd=0;
+			pt->pt_acc=0;
+			pt->pt_dirty=0;
+			pt->pt_mbz=0;
+			pt->pt_global=1;
+			pt->pt_avail=0;
+			pt->pt_base=i*FRAME0 + j;
+			pt++;
+		}
+	}
 	create_page_dir(NULLPROC);
 	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
 	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
