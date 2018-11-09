@@ -160,8 +160,8 @@ typedef struct{
   int bs_npages;			/* number of pages in the store */
   int bs_sem;				/* semaphore mechanism ?	*/
 
-  int bs_private;           /* private heap use? */
-  int bs_mapn;              /* n process map into this backing store */
+  int bs_private;
+  int bs_mapn;
 } bs_map_t;
 
 typedef struct{
@@ -212,8 +212,7 @@ SYSCALL write_bs(char *, bsd_t, int);
 
 /*modified*/
 #define SC 3
-#define AGING 4
-#define LFU 5
+
 
 #define BACKING_STORE_BASE	0x00800000
 /*modified*/
