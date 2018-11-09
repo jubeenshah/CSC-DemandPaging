@@ -123,10 +123,10 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   bsm_tab[source].bs_pid[pid] = SETONE;
   bsm_tab[source].bs_sem      = SETZERO;
   bsm_tab[source].bs_vpno[pid]= vpno;
-  bsm_tab[source].bs_mapn++;
+  //bsm_tab[source].bs_mapn++;
   // int setVPN = vpno;
   //int setSource = source;
-  // bsm_tab[source].bs_mapn = bsm_tab[source].bs_mapn + SETONE;
+  bsm_tab[source].bs_mapn = bsm_tab[source].bs_mapn + SETONE;
   proctab[currpid].vhpno = vpno;
   proctab[currpid].store = source;
 
@@ -149,8 +149,8 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
   int twoFourTen = TWOTEN * 4;
   int pageth;
   unsigned long virtualAddress = vpno * twoFourTen;
-  bsm_tab[proctabStore].bs_mapn--;
-  //bsm_tab[proctabStore].bs_mapn = bsm_tab[proctabStore].bs_mapn - SETONE;
+  //bsm_tab[proctabStore].bs_mapn--;
+  bsm_tab[proctabStore].bs_mapn = bsm_tab[proctabStore].bs_mapn - SETONE;
   while (index < TWOTEN) {
     /* code */
     int checkPid = frm_tab[index].fr_pid;
