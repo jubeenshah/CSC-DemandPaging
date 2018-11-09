@@ -54,10 +54,10 @@ int page_replace_policy = SC;
 #define SETZERO 0
 #define TWOTEN  1024
 bs_map_t bsm_tab[SETONE * 8];
-fr_map_t frm_tab[TWOTEN];
+fr_map_t frm_tab[1024];
 int pfint_cnt=SETZERO;
-int lfu_cnt[TWOTEN];
-int sc_acc[TWOTEN];
+int lfu_cnt[1024];
+int sc_acc[1024];
 int sc_ptr;
 
 
@@ -100,8 +100,8 @@ void init_paging(){
 
 	for(index = SETZERO;index<(SETONE * 4);index = index + SETONE){
 		get_frm(&frm_num);
-		frm_tab[frm_num].fr_type=SETONE;
-		frm_tab[frm_num].fr_status=SETONE;
+		frm_tab[frm_num].fr_type=1;
+		frm_tab[frm_num].fr_status=1;
 		frm_tab[frm_num].fr_pid=0;
 		pt=(TWOTEN + frm_num)*TWOTEN * 4;
 		for(indexDos=SETZERO;indexDos<TWOTEN;indexDos = indexDos + SETONE){
