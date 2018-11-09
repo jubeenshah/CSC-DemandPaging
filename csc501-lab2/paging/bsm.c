@@ -9,7 +9,7 @@
 #define SETONE  1
 #define TWOTEN  1024
 
-#define ANDVAL  0xffff0000
+#define ANDVAL  0xfffff000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
  *-------------------------------------------------------------------------
@@ -89,7 +89,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
   //kprintf("bsm_lookup");
   int index = SETZERO;
   int starth = vaddr & ANDVAL;
-  int startp = (starth)>>16;
+  int startp = (starth)>>12;
   while (index < 8) {
     /* code */
     int checkPIDBSM = bsm_tab[index].bs_pid[pid];
