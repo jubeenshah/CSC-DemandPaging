@@ -6,6 +6,8 @@
 #include <paging.h>
 
 #define TWOTEN 1024
+#define SETONE 1
+#define SETZERO 0
 /*-------------------------------------------------------------------------
  * xmmap - xmmap
  *-------------------------------------------------------------------------
@@ -20,11 +22,11 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   	restore(ps);
 	return SYSERR;
   }
-  if(bsm_tab[source].bs_private==1){
+  if(bsm_tab[source].bs_private==SETONE){
   	restore(ps);
 	return SYSERR;
   }
-  if(bsm_tab[source].bs_mapn>0 && npages> bsm_tab[source].bs_npages){
+  if(bsm_tab[source].bs_mapn>SETZERO && npages> bsm_tab[source].bs_npages){
   	restore(ps);
 	return SYSERR;
   }
@@ -47,7 +49,7 @@ SYSCALL xmunmap(int virtpage)
   STATWORD ps;
   disable(ps);
 
-  if(virtpage<4096){
+  if(virtpage<(TWOTEN * 4)){
   	restore(ps);
 	return SYSERR;
   }
