@@ -32,11 +32,11 @@ SYSCALL init_frm(){
 */
   while (index < TWOTEN) {
     /* code */
-    frm_tab[index].fr_status  = SETZERO;
+    frm_tab[index].fr_status  = 0;
     frm_tab[index].fr_pid     = -SETONE;
     frm_tab[index].fr_vpno    = SETZERO;
     frm_tab[index].fr_refcnt  = SETZERO;
-    frm_tab[index].fr_type    = SETZERO;
+    frm_tab[index].fr_type    = 0;
     frm_tab[index].fr_dirty   = SETZERO;
 
     sc_acc[index]  = SETZERO;
@@ -68,14 +68,14 @@ SYSCALL get_frm(int* avail){
     /* code */
     int checkStatus = frm_tab[index].fr_status;
     //kprintf("Test %d", checkStatus);
-    if (checkStatus == SETZERO) {
+    if (checkStatus == 0) {
       //kprintf("IN");
       *avail = index;
       sc_acc[index] = SETONE;
       restore(ps);
       return OK;
     }
-    index = index + 1;
+    index = index + SETONE;
   }
   //kprintf("OUT%d\n",page_replace_policy);
   if (page_replace_policy == 3) { // 3 = Second Chance
@@ -119,7 +119,7 @@ SYSCALL free_frm(int i)
   index = i;
   checkType = frm_tab[index].fr_type;
 
-  if (checkType == SETZERO) {
+  if (checkType == 0) {
     int v_p_n_o = frm_tab[index].fr_vpno;
     virtualAddress = v_p_n_o;
 
@@ -168,9 +168,9 @@ SYSCALL free_frm(int i)
     if (frm_tab[frameIndex].fr_refcnt-- == SETZERO) {
       /* code */
       frm_tab[frameIndex].fr_pid    = -SETONE;
-      frm_tab[frameIndex].fr_status = SETZERO;
+      frm_tab[frameIndex].fr_status = 0;
       frm_tab[frameIndex].fr_vpno   = TWOTEN * 4;
-      frm_tab[frameIndex].fr_type   = SETZERO;
+      frm_tab[frameIndex].fr_type   = 0;
     }
 
    }
@@ -188,7 +188,7 @@ int getFrameSC() {
   while(SETONE) {
     index = index % TWOTEN;
     int checkType = frm_tab[index].fr_type;
-    if (checkType == SETZERO) {
+    if (checkType == 0) {
       int checkSCValue = sc_acc[index];
       if (checkSCValue == SETONE) {
         int updateSCVAL = SETZERO;
@@ -218,11 +218,11 @@ while (index < TWOTEN) {
     /* code */
     continue;
   }
-  frm_tab[index].fr_status 	= SETZERO;
+  frm_tab[index].fr_status 	= 0;
   frm_tab[index].fr_pid		 	= -SETONE;
   frm_tab[index].fr_vpno		= TWOTEN * 4;
   frm_tab[index].fr_refcnt	= SETZERO;
-  frm_tab[index].fr_type		= SETZERO;
+  frm_tab[index].fr_type		= 0;
   frm_tab[index].fr_dirty 	= SETZERO;
   index = index + SETONE;
 }
