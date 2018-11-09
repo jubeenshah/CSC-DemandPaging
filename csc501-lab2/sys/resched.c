@@ -123,7 +123,7 @@ index = SETZERO;
 		int checkPIDNew = frm_tab[index].fr_pid;
 		int checkTypeNew = frm_tab[index].fr_type;
 
-		if (checkPIDNew == currpid && checkTypeNew == SETZERO) {
+		if (checkPIDNew == currpid && checkTypeNew == 0) {
 			/* code */
 			int vpnoTolookup = frm_tab[index].fr_vpno;
 			// vpnoTolookup = vpnoTolookup * TWOTEN * 4;
