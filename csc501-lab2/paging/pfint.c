@@ -112,8 +112,8 @@ virt_addr = (virt_addr_t *)&virtualAddress;
     int base = TWOTEN + newPageTable;
     pd_entry->pd_base = base;
 
-    frm_tab[newPageTable].fr_status = SETONE;
-    frm_tab[newPageTable].fr_type   = SETONE;
+    frm_tab[newPageTable].fr_status = 1;
+    frm_tab[newPageTable].fr_type   = 1;
     frm_tab[newPageTable].fr_pid    = currpid;
     }
 
@@ -139,8 +139,8 @@ virt_addr = (virt_addr_t *)&virtualAddress;
       int sub = pd_entry->pd_base - TWOTEN;
 
       frm_tab[sub].fr_refcnt++;
-      frm_tab[newFrame].fr_status = SETONE;
-      frm_tab[newFrame].fr_type   = SETZERO;
+      frm_tab[newFrame].fr_status = 1;
+      frm_tab[newFrame].fr_type   = 0;
       frm_tab[newFrame].fr_pid    = currpid;
       //int divi = virtualAddress/twoFourTenTwo;
       frm_tab[newFrame].fr_vpno   = virtualAddress/4096;
