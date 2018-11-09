@@ -138,7 +138,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
       int sub = pd_entry->pd_base - TWOTEN;
 
-      //frm_tab[sub].fr_refcnt++;
+    
       frm_tab[sub].fr_refcnt = frm_tab[sub].fr_refcnt + SETONE;
       frm_tab[newFrame].fr_status = 1;
       frm_tab[newFrame].fr_type   = 0;
