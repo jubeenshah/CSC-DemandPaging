@@ -8,7 +8,7 @@
 #define SETZERO 0
 #define SETONE  1
 #define TWOTEN  1024
-#define BS      16
+
 #define ANDVAL  0xfffff000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
@@ -21,9 +21,9 @@ SYSCALL init_bsm(){
   int index = SETZERO;
   int indexDos;
   int twoFourTen = TWOTEN * 4;
-  while (index<BS) { //8 = Number of backing Store
+  while (index<8) { //8 = Number of backing Store
     /* code */
-    bsm_tab[index].bs_status = SETZERO;
+    bsm_tab[index].bs_status = 0;
     indexDos = SETZERO;
     while (indexDos < NPROC) {
       /* code */
@@ -50,10 +50,10 @@ SYSCALL get_bsm(int* avail) {
   disable(ps);
 
   int index = SETZERO;
-  while (index < BS) { //8 = Number of backing Store
+  while (index < 8) { //8 = Number of backing Store
     /* code */
     int checkStatus = bsm_tab[index].bs_status;
-    if ( checkStatus == SETZERO) {
+    if ( checkStatus == 0) {
       /* code */
       *avail = index;
       restore(ps);
@@ -73,7 +73,7 @@ SYSCALL get_bsm(int* avail) {
 SYSCALL free_bsm(int i){
   STATWORD ps;
 	disable(ps);
-	bsm_tab[i].bs_status=SETZERO;
+	bsm_tab[i].bs_status=0;
 	restore(ps);
 	return OK;
 }
@@ -90,7 +90,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
   int index = SETZERO;
   int starth = vaddr & ANDVAL;
   int startp = (starth)>>12;
-  while (index < BS) {
+  while (index < 8) {
     /* code */
     int checkPIDBSM = bsm_tab[index].bs_pid[pid];
     if ( checkPIDBSM == SETONE) {
@@ -116,14 +116,17 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   STATWORD ps;
 	disable(ps);
 
-  if (bsm_tab[source].bs_status==SETZERO) {
-      bsm_tab[source].bs_status = SETONE;
+  if (bsm_tab[source].bs_status==0) {
+      bsm_tab[source].bs_status = 1;
       bsm_tab[source].bs_npages = npages;
   }
   bsm_tab[source].bs_pid[pid] = SETONE;
   bsm_tab[source].bs_sem      = SETZERO;
   bsm_tab[source].bs_vpno[pid]= vpno;
   bsm_tab[source].bs_mapn++;
+  // int setVPN = vpno;
+  //int setSource = source;
+  // bsm_tab[source].bs_mapn = bsm_tab[source].bs_mapn + SETONE;
   proctab[currpid].vhpno = vpno;
   proctab[currpid].store = source;
 
@@ -147,13 +150,13 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
   int pageth;
   unsigned long virtualAddress = vpno * twoFourTen;
   bsm_tab[proctabStore].bs_mapn--;
-
+  //bsm_tab[proctabStore].bs_mapn = bsm_tab[proctabStore].bs_mapn - SETONE;
   while (index < TWOTEN) {
     /* code */
     int checkPid = frm_tab[index].fr_pid;
     int checkTyp = frm_tab[index].fr_type;
 
-    if (checkPid == pid && checkTyp == SETZERO) {
+    if (checkPid == pid && checkTyp == 0) {
     //  if (checkTyp == SETZERO) {
         if (bsm_lookup(pid, virtualAddress, &proctabStore, &pageth) == SYSERR) {
           continue;
