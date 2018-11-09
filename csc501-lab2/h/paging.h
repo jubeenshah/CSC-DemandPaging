@@ -177,9 +177,7 @@ extern bs_map_t bsm_tab[];
 extern fr_map_t frm_tab[];
 
 /* modified */
-extern int lfu_cnt[];
-extern int sc_acc[];
-extern int sc_ptr;
+
 /* Prototypes for required API calls */
 SYSCALL xmmap(int, bsd_t, int);
 SYSCALL xunmap(int);
@@ -194,10 +192,6 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define NBPG		4096	/* number of bytes per page	*/
 #define FRAME0		1024	/* zero-th frame		*/
 #define NFRAMES 	1024	/* number of frames		*/
-/*modified*/
-//#define NBS 8 /* number of backing store */
-//#define NPPBS 256 /* number of pages per backing store */
-
 
 
 #define BSM_UNMAPPED	0
@@ -210,8 +204,11 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define FR_TBL		1
 #define FR_DIR		2
 
-/*modified*/
+
 #define SC 3
+extern int lfu_cnt[];
+extern int sc_acc[];
+extern int sc_ptr;
 
 
 #define BACKING_STORE_BASE	0x00800000
