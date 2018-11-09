@@ -5,8 +5,6 @@
 
 #define SETONE  1
 #define SETZERO 0
-#define NEIGHT  8 //8
-#define NPAGES  256 //256
 int get_bs(bsd_t bs_id, unsigned int npages) {
 
 STATWORD ps;
