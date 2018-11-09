@@ -136,14 +136,14 @@ void create_page_dir(int pid) {
 	//
   int a = (TWOTEN + frameAvail) * TWOTEN * 4;
   proctab[index].pdbr = a;
-  frm_tab[frameAvail].fr_status = SETONE;
-  frm_tab[frameAvail].fr_type   = SETONE * 2;
+  frm_tab[frameAvail].fr_status = 1;
+  frm_tab[frameAvail].fr_type   = 1 * 2;
   frm_tab[frameAvail].fr_pid    = index;
 	// // int b = TWOTEN + frameAvail;
   // // b = b * TWOTEN * 4;
   pd_entry =   proctab[index].pdbr ;
   int indexDos = SETZERO;
-  while (indexDos < NBPG/sizeof(pd_t)) {
+  while (indexDos < (TWOTEN * 4)/sizeof(pd_t)) {
     /* code */
 		//kprintf("%d", indexDos);
     pd_entry[indexDos].pd_write = SETONE;
