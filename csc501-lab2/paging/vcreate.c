@@ -58,7 +58,7 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
   proctab[pid].vmemlist = list;
   int next = (struct mblock *)(twoFourTen * twoFourTen);
   proctab[pid].vmemlist->mnext = next;
-  proctab[pid].vmemlist->mlen = hsize * 4096;
+  proctab[pid].vmemlist->mlen = SETZERO;
 
   struct mblock *baseblock;
   int c = store * b;
