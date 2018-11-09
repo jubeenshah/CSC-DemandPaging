@@ -165,7 +165,7 @@ SYSCALL free_frm(int i)
     pt_entry->pt_pres = SETZERO;
     int frameIndex = f - TWOTEN;
 
-    if (frm_tab[frameIndex].fr_refcnt-- == SETZERO) {
+    if ((frm_tab[frameIndex].fr_refcnt - 1) == SETZERO) {
       /* code */
       frm_tab[frameIndex].fr_pid    = -SETONE;
       frm_tab[frameIndex].fr_status = 0;
