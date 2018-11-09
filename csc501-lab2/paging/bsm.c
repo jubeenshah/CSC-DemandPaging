@@ -9,7 +9,7 @@
 #define SETONE  1
 #define TWOTEN  1024
 
-#define ANDVAL  0xfffff000
+#define ANDVAL  0xffff0000
 /*-------------------------------------------------------------------------
  * init_bsm- initialize bsm_tab
  *-------------------------------------------------------------------------
@@ -123,7 +123,6 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   bsm_tab[source].bs_pid[pid] = SETONE;
   bsm_tab[source].bs_sem      = SETZERO;
   bsm_tab[source].bs_vpno[pid]= vpno;
-  //bsm_tab[source].bs_mapn++;
   // int setVPN = vpno;
   //int setSource = source;
   bsm_tab[source].bs_mapn = bsm_tab[source].bs_mapn + SETONE;
@@ -149,7 +148,6 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
   int twoFourTen = TWOTEN * 4;
   int pageth;
   unsigned long virtualAddress = vpno * twoFourTen;
-  //bsm_tab[proctabStore].bs_mapn--;
   bsm_tab[proctabStore].bs_mapn = bsm_tab[proctabStore].bs_mapn - SETONE;
   while (index < TWOTEN) {
     /* code */
