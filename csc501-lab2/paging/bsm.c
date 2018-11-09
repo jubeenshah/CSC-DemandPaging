@@ -89,7 +89,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth){
   //kprintf("bsm_lookup");
   int index = SETZERO;
   int starth = vaddr & ANDVAL;
-  int startp = (starth)>>12;
+  int startp = (starth)>>16;
   while (index < 8) {
     /* code */
     int checkPIDBSM = bsm_tab[index].bs_pid[pid];
