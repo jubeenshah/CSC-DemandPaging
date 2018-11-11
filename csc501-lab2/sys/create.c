@@ -15,7 +15,7 @@ LOCAL int newpid();
 #define SETZERO 0
 #define TWOTEN  1024
 
-void create_page_dir(int i);
+void createPageDir(int i);
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
  *------------------------------------------------------------------------
@@ -101,7 +101,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
 	//kprintf("creating page dir");
-	create_page_dir(pid);
+	createPageDir(pid);
 	//kprintf("DONE PID : %d", pid);
 	restore(ps);
 	//kprintf("DONE PID : %d", pid);
@@ -126,7 +126,7 @@ LOCAL int newpid()
 	return(SYSERR);
 }
 
-void create_page_dir(int pid) {
+void createPageDir(int pid) {
 	int index = pid;
   int frameAvail = SETZERO;
   pd_t *pd_entry;
