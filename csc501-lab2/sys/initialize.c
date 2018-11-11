@@ -57,7 +57,7 @@ bs_map_t bsm_tab[SETONE * 8];
 fr_map_t frm_tab[1024];
 int counterPint=SETZERO;
 int lfu_cnt[1024];
-int sc_acc[1024];
+int scAcc[1024];
 int scPointer;
 
 
