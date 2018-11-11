@@ -27,8 +27,7 @@ int	resched()
 	int store;
 	int pageth;
 	int hasToLookup;
-	int old_pid;
-	int old_pid;
+	int oldProcessID;
 	int index;
 
 	disable(PS);
@@ -93,20 +92,19 @@ int	resched()
 #endif
 
 
-	old_pid = optr - proctab;
+	oldProcessID = optr - proctab;
 	index = SETZERO;
-	old_pid = old_pid;
 
 	while (index < TWOTEN) {
 		/* code */
 		int checkPid = frm_tab[index].fr_pid;
 		int checkTyp = frm_tab[index].fr_type;
-		if (checkPid == old_pid && checkTyp == SETZERO) {
+		if (checkPid == oldProcessID && checkTyp == SETZERO) {
 			/* code */
-			// int q = old_pid;
+			// int q = oldProcessID;
 			// int w = frm_tab[index].fr_vpno * TWOTEN * 4;
 
-			hasToLookup = bsm_lookup(old_pid,(frm_tab[index].fr_vpno * TWOTEN * 4),&store, &pageth);
+			hasToLookup = bsm_lookup(oldProcessID,(frm_tab[index].fr_vpno * TWOTEN * 4),&store, &pageth);
 			if (hasToLookup == SYSERR) {
 				continue;
 			}
