@@ -207,7 +207,7 @@ SYSCALL write_bs(char *, bsd_t, int);
 
 #define SC 3
 extern int sc_acc[];
-extern int sc_ptr;
+extern int scPointer;
 
 
 #define BACKING_STORE_BASE	0x00800000

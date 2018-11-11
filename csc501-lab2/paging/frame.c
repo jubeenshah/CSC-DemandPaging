@@ -40,7 +40,7 @@ SYSCALL init_frm(){
     frm_tab[index].fr_dirty   = SETZERO;
 
     sc_acc[index]  = SETZERO;
-    sc_ptr   = SETZERO;
+    scPointer   = SETZERO;
     index = index + SETONE;
   }
   restore(ps);
@@ -183,7 +183,7 @@ int getFrameSC() {
   STATWORD ps;
   disable(ps);
   int index = SETZERO;
-  index = index + sc_ptr;
+  index = index + scPointer;
 
   while(SETONE) {
     index = index % TWOTEN;
@@ -194,7 +194,7 @@ int getFrameSC() {
         int updateSCVAL = SETZERO;
         sc_acc[index] = updateSCVAL;
       } else {
-        sc_ptr = index + SETONE;
+        scPointer = index + SETONE;
         restore (ps);
         return index;
       }
