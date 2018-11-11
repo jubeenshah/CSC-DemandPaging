@@ -53,7 +53,7 @@ int pageCreate() {
  */
 SYSCALL pfint()
 {
-  pfint_cnt = pfint_cnt + SETONE;
+  counterPint = counterPint + SETONE;
 
   STATWORD ps;
   disable(ps);
@@ -138,7 +138,7 @@ virt_addr = (virt_addr_t *)&virtualAddress;
 
       int sub = pd_entry->pd_base - TWOTEN;
 
-    
+
       frm_tab[sub].fr_refcnt = frm_tab[sub].fr_refcnt + SETONE;
       frm_tab[newFrame].fr_status = 1;
       frm_tab[newFrame].fr_type   = 0;

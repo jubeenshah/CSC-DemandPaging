@@ -55,7 +55,7 @@ int page_replace_policy = SC;
 #define TWOTEN  1024
 bs_map_t bsm_tab[SETONE * 8];
 fr_map_t frm_tab[1024];
-int pfint_cnt=SETZERO;
+int counterPint=SETZERO;
 int lfu_cnt[1024];
 int sc_acc[1024];
 int sc_ptr;
