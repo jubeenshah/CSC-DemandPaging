@@ -1,4 +1,4 @@
-bs_mappingbs_mapping/* bsm.c - manage the backing store mapping*/
+/* bsm.c - manage the backing store mapping*/
 
 #include <conf.h>
 #include <kernel.h>
