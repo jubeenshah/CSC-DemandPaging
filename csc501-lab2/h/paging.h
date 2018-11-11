@@ -161,7 +161,7 @@ typedef struct{
   int bs_sem;				/* semaphore mechanism ?	*/
 
   int bs_private;
-  int bs_mapn;
+  int bs_mapping;
 } bs_map_t;
 
 typedef struct{

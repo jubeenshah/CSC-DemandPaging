@@ -1,4 +1,4 @@
-/* bsm.c - manage the backing store mapping*/
+bs_mappingbs_mapping/* bsm.c - manage the backing store mapping*/
 
 #include <conf.h>
 #include <kernel.h>
@@ -34,7 +34,7 @@ SYSCALL init_bsm(){
     bsm_tab[index].bs_npages  = SETZERO;
     bsm_tab[index].bs_sem     = SETZERO;
     bsm_tab[index].bs_private = SETZERO;
-    bsm_tab[index].bs_mapn = SETZERO;
+    bsm_tab[index].bs_mapping = SETZERO;
     index = index + SETONE;
   }
   restore(ps);
@@ -125,7 +125,7 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages){
   bsm_tab[source].bs_vpno[pid]= vpno;
   // int setVPN = vpno;
   //int setSource = source;
-  bsm_tab[source].bs_mapn = bsm_tab[source].bs_mapn + SETONE;
+  bsm_tab[source].bs_mapping = bsm_tab[source].bs_mapping + SETONE;
   proctab[currpid].vhpno = vpno;
   proctab[currpid].store = source;
 
@@ -148,7 +148,7 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag){
   int twoFourTen = TWOTEN * 4;
   int pageth;
   unsigned long virtualAddress = vpno * twoFourTen;
-  bsm_tab[proctabStore].bs_mapn = bsm_tab[proctabStore].bs_mapn - SETONE;
+  bsm_tab[proctabStore].bs_mapping = bsm_tab[proctabStore].bs_mapping - SETONE;
   while (index < TWOTEN) {
     /* code */
     int checkPid = frm_tab[index].fr_pid;

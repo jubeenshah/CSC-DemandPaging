@@ -17,7 +17,7 @@ SYSCALL release_bs(bsd_t bs_id) {
     bsm_tab[index].bs_pid[currpid]  = SETZERO;
     bsm_tab[index].bs_vpno[currpid] = TWOTEN * 4;
 
-    int checkMapping = bsm_tab[index].bs_mapn;
+    int checkMapping = bsm_tab[index].bs_mapping;
     if (checkMapping == SETZERO) {
       /* code */
       bsm_tab[index].bs_status = 0;

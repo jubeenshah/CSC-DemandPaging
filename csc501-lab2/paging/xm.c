@@ -26,7 +26,7 @@ SYSCALL xmmap(int virtpage, bsd_t source, int npages)
   	restore(ps);
 	return SYSERR;
   }
-  if(bsm_tab[source].bs_mapn>SETZERO && npages> bsm_tab[source].bs_npages){
+  if(bsm_tab[source].bs_mapping>SETZERO && npages> bsm_tab[source].bs_npages){
   	restore(ps);
 	return SYSERR;
   }
