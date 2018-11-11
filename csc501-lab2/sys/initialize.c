@@ -120,7 +120,7 @@ void init_paging(){
 		}
 	}
 	create_page_dir(SETONE * SETZERO);
-	set_pdbr(SETONE * SETZERO);/*Set the PDBR register to the page directory for the NULL process.*/
+	pdbr_init(SETONE * SETZERO);/*Set the PDBR register to the page directory for the NULL process.*/
 	set_evec(SETONE * 14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }
