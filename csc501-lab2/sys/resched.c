@@ -137,7 +137,7 @@ index = SETZERO;
 		}
 		index = index + SETONE;
 	}
-	set_pdbr(currpid);
+	pdbr_init(currpid);
 	ctxsw(&optr->pesp, optr->pirmask, &nptr->pesp, nptr->pirmask);
 
 #ifdef	DEBUG

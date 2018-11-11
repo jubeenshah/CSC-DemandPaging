@@ -189,7 +189,7 @@ void enable_paging(){
 }
 
 
-void set_pdbr (int pid) {
+void pdbr_init (int pid) {
   STATWORD ps;
   disable(ps);
   unsigned long pdbr = proctab[pid].pdbr;
