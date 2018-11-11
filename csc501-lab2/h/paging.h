@@ -206,7 +206,6 @@ SYSCALL write_bs(char *, bsd_t, int);
 
 
 #define SC 3
-extern int lfu_cnt[];
 extern int sc_acc[];
 extern int sc_ptr;
 
