@@ -63,8 +63,8 @@ SYSCALL kill(int pid)
 	}
 	int persistStoreVal = proctab[pid].store;
 	release_bs(persistStoreVal);
-	
-	out_frm(pid);
+
+	frameDefine(pid);
 	restore(ps);
 	return(OK);
 }
